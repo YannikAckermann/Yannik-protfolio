@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yannik Ackermann — Applikationsentwickler</title>
+  <meta name="description" content="Yannik Ackermann — Applikationsentwickler bei Swisscom. Full-Stack, AI/ML-Integration, MCP.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" aria-hidden="true">
+    <img src="assets/logo.png" alt="" class="preloader-logo">
+    <span class="preloader-count">0</span>
+  </div>
+
+  <!-- Grain -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Progress -->
+  <div class="progress" aria-hidden="true"><span class="progress-bar"></span></div>
+
+  <!-- Cursor -->
+  <div class="cursor" aria-hidden="true"></div>
+
+  <!-- Header (Port des MinimalistHero-Headers) -->
+  <header class="site-header">
+    <a href="#top" class="h-logo" data-hover aria-label="Yannik Ackermann — Startseite">
+      <img src="assets/logo.png" alt="Yannik Ackermann Logo" class="h-logo-img">
+    </a>
+    <button class="h-burger" aria-label="Menü öffnen" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Mobile Overlay Menu -->
+  <div class="menu-overlay" aria-hidden="true">
+    <nav class="menu-overlay-nav">
+      <a href="#projekte">Projekte</a>
+      <a href="#erfahrung">Werdegang</a>
+      <a href="#skills">Skills</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+
+  <main id="top">
+
+    <!-- ===== HERO — Port der MinimalistHero-Komponente ===== -->
+    <section class="hero" id="hero">
+      <div class="hero-grid">
+
+        <div class="hero-left">
+          <p class="hero-left-text">
+            Lernender Applikationsentwickler bei Swisscom — Full-Stack,
+            AI/ML-Integration und MCP. Drei Projekteinsätze,
+            eine Plattform, viele gelernte Lektionen.
+          </p>
+          <a href="#manifest" class="hero-readmore" data-hover>Mehr erfahren</a>
+        </div>
+
+        <div class="hero-center">
+          <div class="hero-circle" aria-hidden="true"></div>
+          <img class="hero-img" src="assets/Yannik.png"
+               alt="Yannik Ackermann"
+               width="1400" height="1400">
+        </div>
+
+        <div class="hero-right">
+          <h1 class="hero-title">
+            <span>code is</span><br>
+            <span class="hero-title-accent">craft.</span>
+          </h1>
+        </div>
+
+      </div>
+
+      <div class="hero-footer">
+        <div class="hero-socials">
+          <a href="https://www.linkedin.com/in/yannik-ackermann-5a3a10322/" target="_blank" rel="noopener" aria-label="LinkedIn" data-hover>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.119 20.452H3.555V9h3.564v11.452z"/></svg>
+          </a>
+          <a href="https://code.swisscom.com/Yannik.Ackermann" target="_blank" rel="noopener" aria-label="GitLab" data-hover>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m23.6 9.593-.033-.086L20.3.98a.851.851 0 0 0-.336-.405.875.875 0 0 0-1 .054.875.875 0 0 0-.29.44L16.47 7.818H7.537L5.333 1.07a.857.857 0 0 0-.29-.441.875.875 0 0 0-1-.054.86.86 0 0 0-.336.405L.437 9.502l-.032.086a6.066 6.066 0 0 0 2.012 7.01l.01.009.03.021 4.977 3.727 2.462 1.863 1.5 1.132a1.008 1.008 0 0 0 1.22 0l1.499-1.132 2.461-1.863 5.006-3.75.013-.01a6.068 6.068 0 0 0 2.005-7.002z"/></svg>
+          </a>
+          <a href="mailto:yannik.ackermann@swisscom.com" aria-label="E-Mail" data-hover>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          </a>
+          <a href="tel:+41795694276" aria-label="Telefon" data-hover>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </a>
+        </div>
+        <p class="hero-location">Zürich, Schweiz</p>
+      </div>
+    </section>
+
+    <!-- ===== MARQUEE ===== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Full-Stack</span><i>✦</i><span>AI / ML</span><i>✦</i><span>MCP</span><i>✦</i><span>React</span><i>✦</i><span>Spring Boot</span><i>✦</i><span>Go</span><i>✦</i><span>Python</span><i>✦</i><span>AWS</span><i>✦</i><span>Kubernetes</span><i>✦</i>
+        <span>Full-Stack</span><i>✦</i><span>AI / ML</span><i>✦</i><span>MCP</span><i>✦</i><span>React</span><i>✦</i><span>Spring Boot</span><i>✦</i><span>Go</span><i>✦</i><span>Python</span><i>✦</i><span>AWS</span><i>✦</i><span>Kubernetes</span><i>✦</i>
+      </div>
+    </div>
+
+    <!-- ===== MANIFEST ===== -->
+    <section class="manifest" id="manifest">
+      <div class="manifest-grid">
+        <div class="manifest-copy">
+          <span class="section-tag">01 — Über mich</span>
+          <p class="manifest-text" data-words>
+            Ich baue Anwendungen, die AI wirklich nutzen — nicht als Buzzword,
+            sondern als Werkzeug. In drei Projekteinsätzen bei Swisscom bin ich
+            vom Low-Code-Umfeld bis zur produktionsnahen Plattform-Entwicklung
+            gekommen. Mein Schwerpunkt: das Model Context Protocol, mit dem
+            AI-Assistenten sicher auf Unternehmens-APIs zugreifen.
+          </p>
+          <div class="manifest-facts">
+            <div class="fact" data-reveal>
+              <span class="fact-num" data-count="3">0</span>
+              <span class="fact-label">Projekteinsätze<br>bei Swisscom</span>
+            </div>
+            <div class="fact" data-reveal>
+              <span class="fact-num" data-count="10">0</span>
+              <span class="fact-label">Umgesetzte<br>Applikationen</span>
+            </div>
+            <div class="fact" data-reveal>
+              <span class="fact-num">4.9</span>
+              <span class="fact-label">Abschlussnote<br>Bezirksschule</span>
+            </div>
+          </div>
+        </div>
+        <figure class="manifest-art" data-reveal>
+          <img src="assets/fallen-angel.jpg" data-parallax
+               alt="Alexandre Cabanel, Der gefallene Engel (1847), Schwarz-Weiss"
+               width="1600" height="1256">
+          <figcaption>Alexandre Cabanel — <em>The Fallen Angel</em>, 1847</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===== PROJECTS (horizontal) ===== -->
+    <section class="projects" id="projekte">
+      <div class="projects-pin">
+        <div class="projects-head">
+          <span class="section-tag">02 — Ausgewählte Arbeiten</span>
+          <span class="projects-counter"><span class="projects-current">01</span> / 07</span>
+        </div>
+        <div class="projects-track">
+
+          <article class="panel panel-intro">
+            <figure class="panel-intro-art">
+              <img src="assets/laocoon.jpg"
+                   alt="Laokoon-Gruppe, Schwarz-Weiss" width="1200" height="1600">
+            </figure>
+            <div class="panel-intro-copy">
+              <h2 class="panel-intro-title">MCP-Gateway-Plattform</h2>
+              <p class="panel-intro-sub">
+                Drei zusammenspielende Services, entstanden bei Swisscom: Sie machen
+                das Model Context Protocol für den Unternehmenseinsatz nutzbar.
+                <em>Scroll weiter →</em>
+              </p>
+            </div>
+          </article>
+
+          <article class="panel">
+            <span class="panel-num">01</span>
+            <div class="panel-body">
+              <span class="panel-cat">Go · Plattform-Backend</span>
+              <h3 class="panel-title">mcp-gateway-backend</h3>
+              <p class="panel-desc">
+                Zwei Executables: eine API für Nutzer, Gruppen und Gateways — und ein Connector,
+                der mehrere MCP-Server zu einem einzigen Endpoint kombiniert. Code-Execution
+                läuft sandboxed in Kubernetes.
+              </p>
+              <ul class="panel-tags"><li>Go</li><li>gRPC</li><li>PostgreSQL</li><li>Valkey</li><li>Kubernetes</li></ul>
+            </div>
+          </article>
+
+          <article class="panel">
+            <span class="panel-num">02</span>
+            <div class="panel-body">
+              <span class="panel-cat">Python · API-Service</span>
+              <h3 class="panel-title">dynamic-mcp-gateway</h3>
+              <p class="panel-desc">
+                Wandelt beliebige OpenAPI-Specs automatisch in einsatzbereite MCP-Server um —
+                mit konfigurierbarer Auth (Bearer, API Key, OAuth2) und Rate Limiting pro Spec.
+              </p>
+              <ul class="panel-tags"><li>Python</li><li>FastAPI</li><li>SQLModel</li><li>Alembic</li></ul>
+            </div>
+          </article>
+
+          <article class="panel">
+            <span class="panel-num">03</span>
+            <div class="panel-body">
+              <span class="panel-cat">Next.js · Web-App</span>
+              <h3 class="panel-title">mcp-gateway-frontend</h3>
+              <p class="panel-desc">
+                Verwaltungs-UI für Gruppen, MCP-Server und Gateways — typsicherer API-Client,
+                OIDC-SSO, Mehrsprachigkeit, Swisscom Design System.
+              </p>
+              <ul class="panel-tags"><li>Next.js 16</li><li>React 19</li><li>TypeScript</li><li>SDX</li></ul>
+            </div>
+          </article>
+
+          <article class="panel">
+            <span class="panel-num">04</span>
+            <div class="panel-body">
+              <span class="panel-cat">AI · Full-Stack</span>
+              <h3 class="panel-title">AI-Chatbot Todo-App</h3>
+              <p class="panel-desc">
+                Eine Todo-App, die sich vollständig per Chat steuern lässt — natürliche Sprache
+                statt Klicks. React-Frontend, Spring-Boot-Backend, deployed auf AWS.
+              </p>
+              <ul class="panel-tags"><li>React</li><li>Spring Boot</li><li>AWS</li><li>AI</li></ul>
+            </div>
+          </article>
+
+          <article class="panel">
+            <span class="panel-num">05</span>
+            <div class="panel-body">
+              <span class="panel-cat">Machine Learning</span>
+              <h3 class="panel-title">Fussball-Prognosen</h3>
+              <p class="panel-desc">
+                ML-Modell zur Vorhersage von Spielresultaten — von der Datenaufbereitung
+                bis zum trainierten Modell. Als Torhüter weiss ich: Prognosen sind schwer.
+              </p>
+              <ul class="panel-tags"><li>Python</li><li>Machine Learning</li></ul>
+            </div>
+          </article>
+
+          <article class="panel">
+            <span class="panel-num">06</span>
+            <div class="panel-body">
+              <span class="panel-cat">Low-Code · Power Platform</span>
+              <h3 class="panel-title">Power Apps Suite</h3>
+              <p class="panel-desc">
+                Super League App und Zertifikatsverwaltung für das Swisscom-CLA-Team —
+                inklusive automatisierter Workflows mit Power Automate.
+              </p>
+              <ul class="panel-tags"><li>Power Apps</li><li>Power Automate</li></ul>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STATEMENT: Matterhorn (vor Werdegang) ===== -->
+    <section class="statement" aria-label="Statement Werdegang">
+      <img class="statement-bg" src="assets/matterhorn.jpg" data-parallax alt="" aria-hidden="true">
+      <div class="statement-overlay" aria-hidden="true"></div>
+      <p class="statement-text" data-reveal>
+        Vom ersten <em>Hello World</em> bis zur eigenen Plattform:<br>
+        Aufstieg ist <em>Handwerk</em>, kein Zufall.
+      </p>
+    </section>
+
+    <!-- ===== EXPERIENCE ===== -->
+    <section class="exp" id="erfahrung">
+      <div class="exp-grid">
+        <div class="exp-copy">
+          <span class="section-tag">03 — Werdegang</span>
+          <div class="exp-item" data-reveal>
+            <span class="exp-year">2025—26</span>
+            <div class="exp-body">
+              <h3 class="exp-title">Team Halo</h3>
+              <p class="exp-desc">
+                Full-Stack mit Schwerpunkt AI-Integration und Machine Learning:
+                MCP-Client/Server-Implementierungen, CRUD-Apps mit React &amp; Spring Boot,
+                AWS-Deployments, ML-Modelle.
+              </p>
+              <span class="exp-meta">3. Projekteinsatz · Swisscom · seit Juli 2025</span>
+            </div>
+          </div>
+          <div class="exp-item" data-reveal>
+            <span class="exp-year">2025</span>
+            <div class="exp-body">
+              <h3 class="exp-title">Power Builders</h3>
+              <p class="exp-desc">
+                Low-Code-Entwicklung mit Microsoft Power Apps: Super League App,
+                Zertifikatsverwaltung, Workflow-Automatisierung.
+              </p>
+              <span class="exp-meta">2. Projekteinsatz · Swisscom · Jan – Jul 2025</span>
+            </div>
+          </div>
+          <div class="exp-item" data-reveal>
+            <span class="exp-year">2024—25</span>
+            <div class="exp-body">
+              <h3 class="exp-title">Apps Team</h3>
+              <p class="exp-desc">
+                Interaktive Applikationen — Memory Game, Hilferessourcen für den
+                Kundensupport. Mein Einstieg ins Frontend-Handwerk.
+              </p>
+              <span class="exp-meta">1. Projekteinsatz · Swisscom · Jul 2024 – Jan 2025</span>
+            </div>
+          </div>
+        </div>
+        <figure class="exp-art" data-reveal>
+          <img src="assets/thinker.jpg" data-parallax
+               alt="Rodins Der Denker, Schwarz-Weiss" width="1280" height="1707">
+          <figcaption>Auguste Rodin — <em>Le Penseur</em>, 1904</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===== SKILLS ===== -->
+    <section class="skills" id="skills">
+      <span class="section-tag">04 — Werkzeugkasten</span>
+      <ul class="skills-list">
+        <li class="skills-row" data-reveal>
+          <span class="skills-domain">Frontend</span>
+          <span class="skills-items">React · TypeScript · Next.js · HTML/CSS · Tailwind</span>
+        </li>
+        <li class="skills-row" data-reveal>
+          <span class="skills-domain">Backend</span>
+          <span class="skills-items">Spring Boot · Java · Go · Python · FastAPI</span>
+        </li>
+        <li class="skills-row" data-reveal>
+          <span class="skills-domain">AI &amp; Data</span>
+          <span class="skills-items">MCP · Machine Learning · LLM-Integration</span>
+        </li>
+        <li class="skills-row" data-reveal>
+          <span class="skills-domain">Cloud &amp; Infra</span>
+          <span class="skills-items">AWS · Docker · Kubernetes · PostgreSQL · GitLab CI</span>
+        </li>
+        <li class="skills-row" data-reveal>
+          <span class="skills-domain">Low-Code</span>
+          <span class="skills-items">Power Apps · Power Automate</span>
+        </li>
+      </ul>
+      <div class="edu" data-reveal>
+        <p>
+          <strong>Ausbildung:</strong> Informatiker EFZ Applikationsentwicklung (Swisscom, seit 2024) ·
+          Berufsmaturität Winterthur · Bezirksschule mit Schnitt <strong>4.9</strong> ·
+          Kaggle LM Course · Ausserdem: Torhüter, FC Wohlen B-Junioren.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== STATEMENT (Vollbild-Hintergrund) ===== -->
+    <section class="statement" aria-label="Statement">
+      <img class="statement-bg" src="assets/skyline.jpg" data-parallax alt="" aria-hidden="true">
+      <div class="statement-overlay" aria-hidden="true"></div>
+      <p class="statement-text" data-reveal>
+        Der Bildhauer sieht, was im Stein <em>verborgen</em> ist.
+        Der Architekt zeichnet die Pläne. Der Ingenieur sorgt dafür,
+        dass es <em>steht</em>.<br><br>
+        Guter Code vereint alle drei.
+      </p>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="contact" id="kontakt">
+      <span class="section-tag">05 — Kontakt</span>
+      <div class="contact-stage">
+        <div class="contact-circle" aria-hidden="true"></div>
+        <a href="mailto:yannik.ackermann@swisscom.com" class="contact-giant" data-hover>
+          <span class="contact-giant-line"><span data-chars>SAG</span></span>
+          <span class="contact-giant-line"><span data-chars>HALLO&nbsp;↗</span></span>
+        </a>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:yannik.ackermann@swisscom.com" data-hover>yannik.ackermann@swisscom.com</a>
+        <a href="tel:+41795694276" data-hover>+41 79 569 42 76</a>
+        <a href="https://www.linkedin.com/in/yannik-ackermann-5a3a10322/" target="_blank" rel="noopener" data-hover>LinkedIn ↗</a>
+        <a href="https://code.swisscom.com/Yannik.Ackermann" target="_blank" rel="noopener" data-hover>GitLab ↗</a>
+      </div>
+      <div class="contact-refs">
+        <p>Referenzen: <strong>Eva Dietze</strong> (Ausbildungsverantwortliche) · <strong>Sven Waser</strong> (Projektgeber)</p>
+      </div>
+      <footer class="footer">
+        <div class="footer-mark" aria-hidden="true">
+          <span class="footer-mark-line">YANNIK</span>
+          <span class="footer-mark-line footer-mark-line--fill">ACKERMANN</span>
+        </div>
+        <div class="footer-meta">
+          <span class="footer-status">
+            <span class="footer-status-dot"></span>
+            Zürich, Schweiz
+          </span>
+          <a href="#top" class="footer-top" data-hover>
+            <span>Zurück zum Anfang</span>
+            <span class="footer-top-arrow" aria-hidden="true">↑</span>
+          </a>
+        </div>
+      </footer>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="script.js?v=2"></script>
+</body>
+</html>
