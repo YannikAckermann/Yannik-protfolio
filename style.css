@@ -168,6 +168,21 @@ em { font-style: italic; }
 
 .h-logo .dot { color: var(--accent); -webkit-text-stroke: 1px var(--ink); }
 
+.h-actions { display: flex; align-items: center; gap: clamp(12px, 2vw, 22px); }
+
+.h-lang {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  padding: 7px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+.h-lang:hover { background: var(--ink); color: var(--paper); }
+
 .h-burger {
   display: flex;
   flex-direction: column;
@@ -574,6 +589,30 @@ em { font-style: italic; }
   border: 1px solid var(--ink);
   border-radius: 999px;
   color: var(--ink);
+}
+
+.panel-link {
+  display: inline-block;
+  margin-top: 22px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.92rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 3px;
+  width: fit-content;
+  transition: background-color 0.25s;
+}
+
+.panel-link:hover { background: var(--accent); }
+
+.panel-link-note {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-top: 4px;
 }
 
 /* ---------- Experience ---------- */
