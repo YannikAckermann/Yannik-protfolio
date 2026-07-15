@@ -616,18 +616,41 @@ em { font-style: italic; }
 }
 
 /* ---------- Experience ---------- */
-.exp { padding: clamp(100px, 15vh, 190px) var(--pad); }
+.exp {
+  padding: clamp(100px, 15vh, 190px) var(--pad);
+  position: relative;
+  isolation: isolate;
+}
+
+.exp::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("assets/hands.png") center / cover no-repeat;
+  filter: grayscale(1) contrast(1.06);
+  opacity: 0.4;
+}
+
+.exp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to right,
+    rgba(243, 240, 234, 0.9) 0%,
+    rgba(243, 240, 234, 0.55) 55%,
+    rgba(243, 240, 234, 0.25) 100%);
+}
 
 .exp-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1fr;
   gap: clamp(40px, 6vw, 100px);
   align-items: start;
   max-width: 1400px;
   margin: 0 auto;
 }
-
-.exp-art { position: sticky; top: 110px; }
 
 .exp-item {
   display: grid;
