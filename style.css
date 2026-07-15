@@ -258,7 +258,7 @@ em { font-style: italic; }
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   height: 100%;
   min-height: 380px;
 }
@@ -266,6 +266,9 @@ em { font-style: italic; }
 .hero-circle {
   position: absolute;
   z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: clamp(280px, 34vw, 500px);
   height: clamp(280px, 34vw, 500px);
   border-radius: 50%;
@@ -273,14 +276,15 @@ em { font-style: italic; }
   opacity: 0.92;
 }
 
+/* Freigestelltes PNG: kein Zuschnitt, kein Schatten, kein Rand —
+   bewusst grösser als der Kreis, sodass die Person ihn überragt */
 .hero-img {
   position: relative;
   z-index: 10;
-  width: clamp(210px, 22vw, 310px);
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
+  height: clamp(420px, 66svh, 660px);
+  width: auto;
+  max-width: none;
   filter: grayscale(1) contrast(1.08);
-  box-shadow: 0 30px 60px rgba(22, 21, 19, 0.28);
 }
 
 .hero-right {
@@ -704,6 +708,19 @@ em { font-style: italic; }
 
 .statement-text em { font-style: italic; }
 
+.statement-author {
+  display: block;
+  margin-top: 28px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(245, 243, 238, 0.7);
+}
+
+.statement-author::before { content: "— "; }
+
 /* ---------- Contact ---------- */
 .contact {
   min-height: 100svh;
@@ -872,26 +889,57 @@ em { font-style: italic; }
 /* ---------- Mobile ---------- */
 @media (max-width: 900px) {
 
-  .hero { padding-top: 96px; }
+  .site-header { padding: 16px 20px; }
+  .h-logo-img { height: 72px; }
+  .site-header.scrolled .h-logo-img { height: 48px; }
 
-  .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 32px; }
-  .hero-center { order: 1; min-height: 320px; }
+  .hero { padding-top: 104px; }
+
+  .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 28px; }
+  .hero-center { order: 1; min-height: 300px; justify-content: center; }
+  .hero-circle { width: clamp(230px, 66vw, 340px); height: clamp(230px, 66vw, 340px); }
+  .hero-img { height: clamp(300px, 42svh, 440px); }
   .hero-right { order: 2; justify-content: center; }
   .hero-left { order: 3; display: flex; flex-direction: column; align-items: center; }
 
-  .hero-footer { flex-direction: column; align-items: center; gap: 14px; }
+  .hero-footer { flex-direction: column; align-items: center; gap: 14px; margin-top: 40px; }
   .hero-location { text-align: center; }
 
   .manifest-grid, .exp-grid { grid-template-columns: 1fr; }
   .manifest-art { max-width: 480px; }
   .exp-art { position: static; max-width: 480px; }
 
-  .panel { width: 86vw; }
-  .panel-intro { flex-direction: column; align-items: flex-start; width: 86vw; }
-  .panel-intro-art { flex: none; width: 60%; max-width: 300px; }
+  .projects-head { padding-top: 28px; flex-wrap: wrap; gap: 10px; }
+
+  .panel { width: 86vw; padding: 24px 20px; }
+  .panel-intro { flex-direction: column; align-items: flex-start; width: 86vw; gap: 20px; }
+  .panel-intro-art { flex: none; width: 60%; max-width: 280px; }
+  .panel-num { font-size: 4rem; top: 10px; right: 16px; }
 
   .exp-item { grid-template-columns: 1fr; gap: 10px; }
+
   .skills-row { grid-template-columns: 1fr; gap: 6px; }
+
+  .statement { min-height: 72svh; }
+  .statement-text { font-size: clamp(1.4rem, 6.4vw, 2rem); }
+
+  .contact { padding-top: 90px; }
+  .contact-circle { left: 50%; }
+  .contact-links { flex-direction: column; align-items: flex-start; gap: 14px; }
+
+  .footer-meta { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  /* Wortmarke passt sich dem schmalen Viewport an, statt abgeschnitten zu werden */
+  .footer-mark-line { font-size: clamp(2.2rem, 10vw, 6rem); }
+}
+
+/* Sehr kleine Geräte */
+@media (max-width: 420px) {
+  :root { --pad: 16px; }
+  body { font-size: 16px; }
+  .hero-title { font-size: 2.9rem; }
+  .fact-num { font-size: 2.3rem; }
+  .marquee-track span { font-size: 1.05rem; }
 }
 
 /* ---------- Reduced Motion ---------- */
