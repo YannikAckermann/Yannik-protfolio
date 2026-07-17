@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=8">
   <link rel="preload" as="image" href="assets/Yannik-lookingup.webp">
   <link rel="preload" as="image" href="assets/logo.webp">
 </head>
@@ -35,9 +35,6 @@
     <img src="assets/logo.webp" alt="" class="preloader-logo">
     <span class="preloader-count">0</span>
   </div>
-
-  <!-- Grain -->
-  <div class="grain" aria-hidden="true"></div>
 
   <!-- Progress -->
   <div class="progress" aria-hidden="true"><span class="progress-bar"></span></div>
@@ -86,7 +83,7 @@
         <div class="hero-center">
           <div class="hero-circle" aria-hidden="true"></div>
           <img class="hero-img" src="assets/Yannik-lookingup.webp"
-               alt="Yannik Ackermann" fetchpriority="high"
+               alt="Yannik Ackermann als Marmorstatue" fetchpriority="high"
                width="933" height="1400">
         </div>
 
@@ -147,10 +144,6 @@
               <span class="fact-num" data-count="10">0</span>
               <span class="fact-label">Umgesetzte<br>Applikationen</span>
             </div>
-            <div class="fact" data-reveal>
-              <span class="fact-num">4.9</span>
-              <span class="fact-label">Abschlussnote<br>Bezirksschule</span>
-            </div>
           </div>
         </div>
         <figure class="manifest-art" data-reveal>
@@ -167,7 +160,7 @@
       <div class="projects-pin">
         <div class="projects-head">
           <span class="section-tag">02 — Ausgewählte Arbeiten</span>
-          <span class="projects-counter"><span class="projects-current">01</span> / 06</span>
+          <span class="projects-counter"><span class="projects-current">01</span> / 05</span>
         </div>
         <div class="projects-track">
 
@@ -177,42 +170,25 @@
                    alt="Herbert James Draper, Die Klage um Ikarus, Schwarz-Weiss" width="1600" height="1200">
             </figure>
             <div class="panel-intro-copy">
-              <h2 class="panel-intro-title">MCP-Gateway-Plattform</h2>
+              <h2 class="panel-intro-title">Ausgewählte Arbeiten</h2>
               <p class="panel-intro-sub">
-                Backend und Frontend, entstanden bei Swisscom: Zusammen machen sie
-                das Model Context Protocol für den Unternehmenseinsatz nutzbar.
-                <em>Scroll weiter →</em>
+                Vier Projekte aus drei Einsätzen bei Swisscom — von Low-Code
+                bis zur eigenen Plattform. <em>Scroll weiter →</em>
               </p>
-              <a class="panel-link" href="https://mcp-gateway-frontend.dev-scapp-corp.swisscom.com/de" target="_blank" rel="noopener" data-hover>
-                Live ansehen ↗ <span class="panel-link-note">nur im Swisscom Corpnet erreichbar</span>
-              </a>
             </div>
           </article>
 
           <article class="panel">
             <span class="panel-num">01</span>
             <div class="panel-body">
-              <span class="panel-cat">Go · Plattform-Backend</span>
-              <h3 class="panel-title">mcp-gateway-backend</h3>
+              <span class="panel-cat">Go · Next.js · Full-Stack</span>
+              <h3 class="panel-title">MCP Gateway</h3>
               <p class="panel-desc">
-                Zwei Executables: eine API für Nutzer, Gruppen und Gateways — und ein Connector,
-                der mehrere MCP-Server zu einem einzigen Endpoint kombiniert. Code-Execution
-                läuft sandboxed in Kubernetes.
+                Plattform, entstanden bei Swisscom: ein Go-Backend, das mehrere MCP-Server
+                hinter einem einzigen Endpoint bündelt, plus Next.js-Verwaltungs-UI —
+                mit SSO, gRPC und Kubernetes-Sandbox.
               </p>
-              <ul class="panel-tags"><li>Go</li><li>gRPC</li><li>PostgreSQL</li><li>Valkey</li><li>Kubernetes</li></ul>
-            </div>
-          </article>
-
-          <article class="panel">
-            <span class="panel-num">02</span>
-            <div class="panel-body">
-              <span class="panel-cat">Next.js · Web-App</span>
-              <h3 class="panel-title">mcp-gateway-frontend</h3>
-              <p class="panel-desc">
-                Verwaltungs-UI für Gruppen, MCP-Server und Gateways — typsicherer API-Client,
-                OIDC-SSO, Mehrsprachigkeit, Swisscom Design System.
-              </p>
-              <ul class="panel-tags"><li>Next.js 16</li><li>React 19</li><li>TypeScript</li><li>SDX</li></ul>
+              <ul class="panel-tags"><li>Go</li><li>gRPC</li><li>Kubernetes</li><li>Next.js</li><li>TypeScript</li></ul>
               <a class="panel-link" href="https://mcp-gateway-frontend.dev-scapp-corp.swisscom.com/de" target="_blank" rel="noopener" data-hover>
                 Live ansehen ↗ <span class="panel-link-note">nur im Swisscom Corpnet erreichbar</span>
               </a>
@@ -220,7 +196,7 @@
           </article>
 
           <article class="panel">
-            <span class="panel-num">03</span>
+            <span class="panel-num">02</span>
             <div class="panel-body">
               <span class="panel-cat">AI · Full-Stack</span>
               <h3 class="panel-title">AI-Chatbot Todo-App</h3>
@@ -233,7 +209,7 @@
           </article>
 
           <article class="panel">
-            <span class="panel-num">04</span>
+            <span class="panel-num">03</span>
             <div class="panel-body">
               <span class="panel-cat">Machine Learning</span>
               <h3 class="panel-title">Fussball-Prognosen</h3>
@@ -249,7 +225,7 @@
           </article>
 
           <article class="panel">
-            <span class="panel-num">05</span>
+            <span class="panel-num">04</span>
             <div class="panel-body">
               <span class="panel-cat">Low-Code · Power Platform</span>
               <h3 class="panel-title">Power Apps Suite</h3>
@@ -263,17 +239,6 @@
 
         </div>
       </div>
-    </section>
-
-    <!-- ===== STATEMENT: Matterhorn (vor Werdegang) ===== -->
-    <section class="statement" aria-label="Statement Werdegang">
-      <img class="statement-bg" src="assets/matterhorn.webp" data-parallax loading="lazy" decoding="async" alt="" aria-hidden="true">
-      <div class="statement-overlay" aria-hidden="true"></div>
-      <p class="statement-text" data-reveal>
-        «Es sind nicht die Berge, die wir bezwingen —<br>
-        sondern <em>wir selbst</em>.»
-        <span class="statement-author">Edmund Hillary</span>
-      </p>
     </section>
 
     <!-- ===== EXPERIENCE ===== -->
@@ -321,7 +286,7 @@
 
     <!-- ===== SKILLS ===== -->
     <section class="skills" id="skills">
-      <span class="section-tag">04 — Werkzeugkasten</span>
+      <span class="section-tag">04 — Skills</span>
       <ul class="skills-list">
         <li class="skills-row" data-reveal>
           <span class="skills-domain">Frontend</span>
@@ -347,15 +312,15 @@
       <div class="edu" data-reveal>
         <p>
           <strong>Ausbildung:</strong> Informatiker EFZ Applikationsentwicklung (Swisscom, seit 2024) ·
-          Berufsmaturität Winterthur · Bezirksschule mit Schnitt <strong>4.9</strong> ·
-          Kaggle LM Course · Ausserdem: Torhüter, FC Wohlen B-Junioren.
+          Berufsmaturität Winterthur · Kaggle LM Course ·
+          Ausserdem: Torhüter, FC Sarmenstorf.
         </p>
       </div>
     </section>
 
     <!-- ===== STATEMENT (Vollbild-Hintergrund) ===== -->
     <section class="statement" aria-label="Statement">
-      <img class="statement-bg" src="assets/skyline.webp" data-parallax loading="lazy" decoding="async" alt="" aria-hidden="true">
+      <img class="statement-bg" src="assets/skyline.webp" loading="lazy" decoding="async" alt="" aria-hidden="true">
       <div class="statement-overlay" aria-hidden="true"></div>
       <p class="statement-text" data-reveal>
         «Nicht weil es schwer ist, wagen wir es nicht —<br>
@@ -383,22 +348,6 @@
       <div class="contact-refs">
         <p>Referenzen: <strong>Nithursan Naguleswaran</strong> (LB) · <strong>Sven Waser</strong> (Host)</p>
       </div>
-      <footer class="footer">
-        <div class="footer-mark" aria-hidden="true">
-          <span class="footer-mark-line">YANNIK</span>
-          <span class="footer-mark-line footer-mark-line--fill">ACKERMANN</span>
-        </div>
-        <div class="footer-meta">
-          <span class="footer-status">
-            <span class="footer-status-dot"></span>
-            Zürich, Schweiz
-          </span>
-          <a href="#top" class="footer-top" data-hover>
-            <span>Zurück zum Anfang</span>
-            <span class="footer-top-arrow" aria-hidden="true">↑</span>
-          </a>
-        </div>
-      </footer>
     </section>
 
   </main>
