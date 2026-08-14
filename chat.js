@@ -60,7 +60,8 @@
   var started = false;
 
   input.placeholder = T.placeholder;
-  toggle.querySelector(".chat-label").textContent = T.openLabel;
+  var hint = toggle.querySelector(".chat-toggle-hint");
+  if (hint) hint.textContent = T.openLabel;
 
   /* ---------- Rendering ---------- */
   function addMessage(text, kind) {
@@ -107,6 +108,7 @@
   function open() {
     root.classList.add("open");
     toggle.setAttribute("aria-expanded", "true");
+    toggle.setAttribute("aria-label", isEN ? "Close chat" : "Chat schliessen");
     bootstrap();
     setTimeout(function () { input.focus(); }, 300);
   }
@@ -114,6 +116,7 @@
   function close() {
     root.classList.remove("open");
     toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", isEN ? "Open chat" : "Chat öffnen");
   }
 
   toggle.addEventListener("click", function () {
