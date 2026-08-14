@@ -1,0 +1,206 @@
+/* Portfolio-Chatbot — spricht mit /api/chat (Gemini via Vercel Edge Function) */
+(function () {
+  "use strict";
+
+  var root = document.querySelector(".chat");
+  if (!root) return;
+
+  var isEN = document.documentElement.lang === "en";
+
+  var T = isEN
+    ? {
+        greeting:
+          "Hi! I can answer questions about Yannik — his projects, skills and availability. What would you like to know?",
+        suggestions: [
+          "What's his experience with AI?",
+          "What is the MCP Gateway?",
+          "When is he available?"
+        ],
+        placeholder: "Ask a question …",
+        openLabel: "Ask about Yannik",
+        errNotConfigured:
+          "The chat isn't set up yet. You can reach Yannik directly at yannik.ackermann@swisscom.com.",
+        errRate: "That was a lot of questions at once — please try again in a minute.",
+        errGeneric:
+          "Something went wrong there. Please try again, or email yannik.ackermann@swisscom.com.",
+        errEmpty: "No answer came back. Please try rephrasing your question."
+      }
+    : {
+        greeting:
+          "Hoi! Ich beantworte Fragen zu Yannik — seinen Projekten, Skills und seiner Verfügbarkeit. Was möchtest du wissen?",
+        suggestions: [
+          "Welche Erfahrung hat er mit AI?",
+          "Was ist das MCP Gateway?",
+          "Ab wann ist er verfügbar?"
+        ],
+        placeholder: "Frage stellen …",
+        openLabel: "Frag mich über Yannik",
+        errNotConfigured:
+          "Der Chat ist noch nicht eingerichtet. Du erreichst Yannik direkt unter yannik.ackermann@swisscom.com.",
+        errRate: "Das waren viele Fragen auf einmal — bitte in einer Minute nochmal versuchen.",
+        errGeneric:
+          "Da ist etwas schiefgelaufen. Bitte nochmal versuchen oder eine Mail an yannik.ackermann@swisscom.com.",
+        errEmpty: "Es kam keine Antwort zurück. Formuliere die Frage bitte etwas anders."
+      };
+
+  var toggle = root.querySelector(".chat-toggle");
+  var panel = root.querySelector(".chat-panel");
+  var log = root.querySelector(".chat-log");
+  var form = root.querySelector(".chat-form");
+  var input = root.querySelector(".chat-input");
+  var sendBtn = root.querySelector(".chat-send");
+  var chips = root.querySelector(".chat-suggestions");
+
+  var history = [];
+  var busy = false;
+  var started = false;
+
+  input.placeholder = T.placeholder;
+  toggle.querySelector(".chat-label").textContent = T.openLabel;
+
+  /* ---------- Rendering ---------- */
+  function addMessage(text, kind) {
+    var el = document.createElement("div");
+    el.className = "chat-msg chat-msg-" + kind;
+    el.textContent = text;
+    log.appendChild(el);
+    log.scrollTop = log.scrollHeight;
+    return el;
+  }
+
+  function addTyping() {
+    var el = document.createElement("div");
+    el.className = "chat-msg chat-msg-bot";
+    el.innerHTML = '<span class="chat-typing"><span></span><span></span><span></span></span>';
+    log.appendChild(el);
+    log.scrollTop = log.scrollHeight;
+    return el;
+  }
+
+  function renderSuggestions() {
+    chips.innerHTML = "";
+    T.suggestions.forEach(function (q) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chat-chip";
+      b.textContent = q;
+      b.addEventListener("click", function () {
+        chips.innerHTML = "";
+        send(q);
+      });
+      chips.appendChild(b);
+    });
+  }
+
+  function bootstrap() {
+    if (started) return;
+    started = true;
+    addMessage(T.greeting, "bot");
+    renderSuggestions();
+  }
+
+  /* ---------- Öffnen / Schliessen ---------- */
+  function open() {
+    root.classList.add("open");
+    toggle.setAttribute("aria-expanded", "true");
+    bootstrap();
+    setTimeout(function () { input.focus(); }, 300);
+  }
+
+  function close() {
+    root.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  toggle.addEventListener("click", function () {
+    root.classList.contains("open") ? close() : open();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && root.classList.contains("open")) close();
+  });
+
+  /* ---------- Senden & Streamen ---------- */
+  function setBusy(state) {
+    busy = state;
+    sendBtn.disabled = state;
+    input.disabled = state;
+  }
+
+  async function send(text) {
+    if (busy) return;
+    var message = String(text || "").trim();
+    if (!message) return;
+
+    addMessage(message, "user");
+    input.value = "";
+    setBusy(true);
+
+    var placeholder = addTyping();
+    var answer = "";
+
+    try {
+      var res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          message: message,
+          history: history,
+          lang: isEN ? "en" : "de"
+        })
+      });
+
+      if (!res.ok) {
+        var reason = T.errGeneric;
+        if (res.status === 503) reason = T.errNotConfigured;
+        else if (res.status === 429) reason = T.errRate;
+        placeholder.remove();
+        addMessage(reason, "error");
+        setBusy(false);
+        return;
+      }
+
+      // Antwort zeichenweise einblenden
+      var reader = res.body.getReader();
+      var decoder = new TextDecoder();
+      var first = true;
+
+      for (;;) {
+        var chunk = await reader.read();
+        if (chunk.done) break;
+        var piece = decoder.decode(chunk.value, { stream: true });
+        if (!piece) continue;
+        if (first) {
+          placeholder.textContent = "";
+          first = false;
+        }
+        answer += piece;
+        placeholder.textContent = answer;
+        log.scrollTop = log.scrollHeight;
+      }
+
+      if (!answer.trim()) {
+        placeholder.remove();
+        addMessage(T.errEmpty, "error");
+        setBusy(false);
+        return;
+      }
+
+      history.push({ role: "user", text: message });
+      history.push({ role: "model", text: answer });
+      if (history.length > 8) history = history.slice(-8);
+    } catch (err) {
+      placeholder.remove();
+      addMessage(T.errGeneric, "error");
+    }
+
+    setBusy(false);
+    input.focus();
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    chips.innerHTML = "";
+    send(input.value);
+  });
+})();
