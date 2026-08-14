@@ -981,12 +981,15 @@ em { font-style: italic; }
   overscroll-behavior: contain;      /* kein Scroll-Übergriff auf die Seite */
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   gap: 20px;
   padding: 8px 4px 4px;
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
 }
+
+/* Inhalt unten halten, ohne justify-content: flex-end — das macht
+   ueberlaufenden Inhalt oben unerreichbar (nicht scrollbar). */
+.chat-log > :first-child { margin-top: auto; }
 
 .chat-log::-webkit-scrollbar { width: 6px; }
 .chat-log::-webkit-scrollbar-track { background: transparent; }

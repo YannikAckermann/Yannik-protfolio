@@ -21,7 +21,17 @@
           "What is the MCP Gateway?",
           "When is he available for a new project?",
           "Which technologies does he work with?",
-          "What did he build at Swisscom?"
+          "What did he build at Swisscom?",
+          "Does he know React and TypeScript?",
+          "What is the Model Context Protocol?",
+          "Which teams has he worked in?",
+          "Does he have cloud experience?",
+          "What is he learning right now?",
+          "Has he worked with machine learning?",
+          "What does his training involve?",
+          "Which backend languages does he use?",
+          "How can I get in touch with him?",
+          "What does he do outside of work?"
         ],
         openLabel: "Ask about Yannik",
         errNotConfigured:
@@ -46,7 +56,17 @@
           "Was ist das MCP Gateway?",
           "Ab wann ist er für ein neues Projekt verfügbar?",
           "Mit welchen Technologien arbeitet er?",
-          "Was hat er bei Swisscom gebaut?"
+          "Was hat er bei Swisscom gebaut?",
+          "Kann er React und TypeScript?",
+          "Was ist das Model Context Protocol?",
+          "In welchen Teams hat er gearbeitet?",
+          "Hat er Erfahrung mit der Cloud?",
+          "Woran lernt er gerade?",
+          "Hat er schon mit Machine Learning gearbeitet?",
+          "Wie läuft seine Ausbildung ab?",
+          "Welche Backend-Sprachen nutzt er?",
+          "Wie kann ich ihn erreichen?",
+          "Was macht er neben der Arbeit?"
         ],
         openLabel: "Frag mich über Yannik",
         errNotConfigured:
@@ -101,7 +121,7 @@
   }
 
   function cyclePlaceholder() {
-    if (input.value || document.activeElement === input) return;
+    if (input.value) return;
     hidePlaceholder();
     setTimeout(function () {
       phIndex = (phIndex + 1) % T.placeholders.length;
@@ -120,15 +140,15 @@
     phTimer = null;
   }
 
+  // Die Fragen laufen weiter, solange nichts getippt ist — auch bei Fokus,
+  // sonst waeren sie nach dem Oeffnen sofort weg (der Eingabe wird fokussiert).
   function updatePlaceholderVisibility() {
-    var show = !input.value && document.activeElement !== input;
+    var show = !input.value;
     placeholderEl.style.display = show ? "" : "none";
     if (show && !phTimer) startPlaceholders();
     if (!show) stopPlaceholders();
   }
 
-  input.addEventListener("focus", updatePlaceholderVisibility);
-  input.addEventListener("blur", updatePlaceholderVisibility);
   input.addEventListener("input", updatePlaceholderVisibility);
 
   /* ---------- Nachrichten ---------- */
