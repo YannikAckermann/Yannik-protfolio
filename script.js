@@ -109,22 +109,6 @@
     });
   }
 
-  /* ---------- Cursor ---------- */
-  var cursor = document.querySelector(".cursor");
-  if (cursor && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    var cx = gsap.quickTo(cursor, "x", { duration: 0.18, ease: "power3" });
-    var cy = gsap.quickTo(cursor, "y", { duration: 0.18, ease: "power3" });
-    window.addEventListener("mousemove", function (e) {
-      cursor.classList.add("on");
-      cx(e.clientX);
-      cy(e.clientY);
-    });
-    document.querySelectorAll("a, button, [data-hover]").forEach(function (el) {
-      el.addEventListener("mouseenter", function () { cursor.classList.add("grow"); });
-      el.addEventListener("mouseleave", function () { cursor.classList.remove("grow"); });
-    });
-  }
-
   /* ---------- Progress ---------- */
   gsap.to(".progress-bar", {
     scaleX: 1,
