@@ -1,0 +1,6 @@
+{
+  "name": "yannik-portfolio",
+  "private": true,
+  "type": "module",
+  "description": "Portfolio-Website von Yannik Ackermann (statisches HTML + Vercel Edge Function fuer den Chat)"
+}
