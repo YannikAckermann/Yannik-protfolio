@@ -30,10 +30,12 @@ AI-Assistenten sicher auf Unternehmens-APIs zugreifen.
 2. **Power Builders** (Januar 2025 – Juli 2025, 2. Einsatz)
    Low-Code-Entwicklung mit Microsoft Power Apps: Super League App,
    Zertifikatsverwaltung für das CLA-Team, Workflow-Automatisierung mit Power Automate.
-3. **Team Halo** (seit Juli 2025, 3. und aktueller Einsatz)
+3. **Team Halo** (Juli 2025 – Januar 2027, 3. und aktueller Einsatz)
    Full-Stack mit Schwerpunkt AI-Integration und Machine Learning:
    MCP-Client/Server-Implementierungen, CRUD-Apps mit React und Spring Boot,
    AWS-Deployments, ML-Modelle.
+   Dieser Einsatz läuft noch — deshalb ist Yannik erst ab dem 01.02.2027
+   für einen neuen Projekteinsatz verfügbar.
 
 ## Projekte
 1. **MCP Gateway** (Go, Next.js, Full-Stack, bei Swisscom)
