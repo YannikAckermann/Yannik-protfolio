@@ -99,9 +99,33 @@ await readAll(res);
 check("EN-Systemprompt aktiv", captured.systemInstruction.parts[0].text.includes("Write in English."));
 
 // 8. Upstream-Fehler
-globalThis.fetch = async () => ({ ok: false, status: 500, body: null });
+globalThis.fetch = async () => ({ ok: false, status: 500, body: null, text: async () => "boom" });
 res = await handler(makeReq({ message: "Test" }));
 check("Upstream-Fehler -> 502", res.status === 502);
+
+// 8b. Dauerhafter Fehler (403) bricht sofort ab, statt weitere Modelle zu probieren
+let calls = 0;
+globalThis.fetch = async () => {
+  calls++;
+  return { ok: false, status: 403, body: null, text: async () => "invalid key" };
+};
+res = await handler(makeReq({ message: "Test" }));
+check("403 bricht nach einem Versuch ab", calls === 1, calls + " Aufruf(e)");
+check("403 -> 502 mit Detail", res.status === 502);
+
+// 8c. Bei 503 wird das naechste Modell probiert
+let seen = [];
+globalThis.fetch = async (url) => {
+  seen.push(url.match(/models\/([^:]+):/)[1]);
+  if (seen.length === 1) return { ok: false, status: 503, body: null, text: async () => "busy" };
+  return {
+    ok: true, status: 200,
+    body: new ReadableStream({ start(c) { c.enqueue(encoder.encode('data: {"candidates":[{"content":{"parts":[{"text":"fallback"}]}}]}\n\n')); c.close(); } })
+  };
+};
+res = await handler(makeReq({ message: "Test" }));
+text = await readAll(res);
+check("503 faellt auf zweites Modell zurueck", text === "fallback" && seen.length === 2, seen.join(" -> "));
 
 // 9. Rate-Limit
 globalThis.fetch = async () => ({

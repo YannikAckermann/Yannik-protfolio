@@ -2,8 +2,18 @@ import { SYSTEM_DE, SYSTEM_EN } from "./profile.js";
 
 export const config = { runtime: "edge" };
 
-const MODEL = "gemini-2.0-flash";
-const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`;
+// Modelle per Env überschreibbar — welche der Key kann, zeigt api/list-models.mjs.
+// Gemini liefert bei Lastspitzen 503; dann wird der Reihe nach das nächste
+// Modell probiert, statt dem Besucher einen Fehler zu zeigen.
+const MODELS = [
+  ...new Set([process.env.GEMINI_MODEL || "gemini-flash-latest", "gemini-3-flash-preview"])
+];
+
+const endpointFor = (model) =>
+  `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
+
+// Status, bei denen sich ein weiterer Versuch lohnt (Überlastung, Rate-Limit, Serverfehler)
+const RETRYABLE = new Set([429, 500, 502, 503, 504]);
 
 const MAX_MESSAGE_LEN = 500;
 const MAX_HISTORY = 8;          // letzte N Nachrichten, hält den Prompt klein
@@ -64,24 +74,65 @@ export default async function handler(req) {
 
   contents.push({ role: "user", parts: [{ text: message }] });
 
-  let upstream;
-  try {
-    upstream = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": key },
-      body: JSON.stringify({
-        contents,
-        systemInstruction: { parts: [{ text: lang === "en" ? SYSTEM_EN : SYSTEM_DE }] },
-        generationConfig: { maxOutputTokens: 400, temperature: 0.6 },
-        safetySettings: []
-      })
-    });
-  } catch {
-    return json({ error: "upstream_unreachable" }, 502);
+  const body = JSON.stringify({
+    contents,
+    systemInstruction: { parts: [{ text: lang === "en" ? SYSTEM_EN : SYSTEM_DE }] },
+    // thinkingBudget 0: neuere Flash-Modelle verbrauchen sonst einen Teil des
+    // Token-Budgets fürs interne Denken und die Antwort bricht mittendrin ab.
+    generationConfig: {
+      maxOutputTokens: 600,
+      temperature: 0.6,
+      thinkingConfig: { thinkingBudget: 0 }
+    },
+    safetySettings: []
+  });
+
+  let upstream = null;
+  let lastStatus = 0;
+  let lastDetail = "";
+  let usedModel = MODELS[0];
+
+  for (const model of MODELS) {
+    let res;
+    try {
+      res = await fetch(endpointFor(model), {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": key },
+        body
+      });
+    } catch (err) {
+      lastStatus = 0;
+      lastDetail = String(err?.message || err);
+      continue;
+    }
+
+    if (res.ok && res.body) {
+      upstream = res;
+      usedModel = model;
+      break;
+    }
+
+    lastStatus = res.status;
+    try {
+      lastDetail = (await res.text()).slice(0, 300);
+    } catch {
+      lastDetail = "";
+    }
+    console.error(`Gemini-Fehler ${res.status} (Modell: ${model}): ${lastDetail}`);
+
+    // Bei dauerhaften Fehlern (z. B. 403 ungültiger Key) bringt ein anderes
+    // Modell nichts — dann sofort abbrechen.
+    if (!RETRYABLE.has(res.status) && res.status !== 404) break;
   }
 
-  if (!upstream.ok || !upstream.body) {
-    return json({ error: "upstream_error", status: upstream.status }, 502);
+  if (!upstream) {
+    if (lastStatus === 0) return json({ error: "upstream_unreachable", detail: lastDetail }, 502);
+    // Googles Meldung durchreichen — sonst ist ein 404 (Modell weg) nicht von
+    // einem 403 (Key ungültig) zu unterscheiden. Enthält keine Secrets.
+    return json(
+      { error: "upstream_error", status: lastStatus, models: MODELS, detail: lastDetail },
+      lastStatus === 503 ? 503 : 502
+    );
   }
 
   // Geminis SSE-Stream in reinen Text umwandeln, damit der Client nur noch

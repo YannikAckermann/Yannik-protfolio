@@ -21,6 +21,8 @@
         errNotConfigured:
           "The chat isn't set up yet. You can reach Yannik directly at yannik.ackermann@swisscom.com.",
         errRate: "That was a lot of questions at once — please try again in a minute.",
+        errBusy:
+          "The AI service is briefly overloaded. Please try again in a moment — or email yannik.ackermann@swisscom.com.",
         errGeneric:
           "Something went wrong there. Please try again, or email yannik.ackermann@swisscom.com.",
         errEmpty: "No answer came back. Please try rephrasing your question."
@@ -38,6 +40,8 @@
         errNotConfigured:
           "Der Chat ist noch nicht eingerichtet. Du erreichst Yannik direkt unter yannik.ackermann@swisscom.com.",
         errRate: "Das waren viele Fragen auf einmal — bitte in einer Minute nochmal versuchen.",
+        errBusy:
+          "Der AI-Dienst ist gerade kurz überlastet. Bitte gleich nochmal versuchen — oder eine Mail an yannik.ackermann@swisscom.com.",
         errGeneric:
           "Da ist etwas schiefgelaufen. Bitte nochmal versuchen oder eine Mail an yannik.ackermann@swisscom.com.",
         errEmpty: "Es kam keine Antwort zurück. Formuliere die Frage bitte etwas anders."
@@ -152,7 +156,9 @@
 
       if (!res.ok) {
         var reason = T.errGeneric;
-        if (res.status === 503) reason = T.errNotConfigured;
+        var payload = await res.json().catch(function () { return {}; });
+        if (res.status === 503 && payload.error === "not_configured") reason = T.errNotConfigured;
+        else if (res.status === 503) reason = T.errBusy;
         else if (res.status === 429) reason = T.errRate;
         placeholder.remove();
         addMessage(reason, "error");
