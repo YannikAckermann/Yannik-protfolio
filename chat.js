@@ -1,4 +1,4 @@
-/* Portfolio-Chatbot — spricht mit /api/chat (Gemini via Vercel Edge Function) */
+/* Portfolio-Chatbot — Vollbild-Überlagerung, spricht mit /api/chat (Gemini) */
 (function () {
   "use strict";
 
@@ -16,7 +16,13 @@
           "What is the MCP Gateway?",
           "When is he available?"
         ],
-        placeholder: "Ask a question …",
+        placeholders: [
+          "What's Yannik's experience with AI?",
+          "What is the MCP Gateway?",
+          "When is he available for a new project?",
+          "Which technologies does he work with?",
+          "What did he build at Swisscom?"
+        ],
         openLabel: "Ask about Yannik",
         errNotConfigured:
           "The chat isn't set up yet. You can reach Yannik directly at yannik.ackermann@swisscom.com.",
@@ -35,7 +41,13 @@
           "Was ist das MCP Gateway?",
           "Ab wann ist er verfügbar?"
         ],
-        placeholder: "Frage stellen …",
+        placeholders: [
+          "Welche Erfahrung hat Yannik mit AI?",
+          "Was ist das MCP Gateway?",
+          "Ab wann ist er für ein neues Projekt verfügbar?",
+          "Mit welchen Technologien arbeitet er?",
+          "Was hat er bei Swisscom gebaut?"
+        ],
         openLabel: "Frag mich über Yannik",
         errNotConfigured:
           "Der Chat ist noch nicht eingerichtet. Du erreichst Yannik direkt unter yannik.ackermann@swisscom.com.",
@@ -48,22 +60,78 @@
       };
 
   var toggle = root.querySelector(".chat-toggle");
-  var panel = root.querySelector(".chat-panel");
+  var overlay = root.querySelector(".chat-overlay");
+  var closeBtn = root.querySelector(".chat-close");
   var log = root.querySelector(".chat-log");
-  var form = root.querySelector(".chat-form");
+  var form = root.querySelector(".chat-bar");
   var input = root.querySelector(".chat-input");
   var sendBtn = root.querySelector(".chat-send");
   var chips = root.querySelector(".chat-suggestions");
+  var placeholderEl = root.querySelector(".chat-placeholder");
 
   var history = [];
   var busy = false;
   var started = false;
+  var lastFocus = null;
 
-  input.placeholder = T.placeholder;
   var hint = toggle.querySelector(".chat-toggle-hint");
   if (hint) hint.textContent = T.openLabel;
 
-  /* ---------- Rendering ---------- */
+  /* ---------- Animierter Platzhalter ---------- */
+  var phIndex = 0;
+  var phTimer = null;
+
+  function renderPlaceholder(text) {
+    placeholderEl.classList.remove("out");
+    placeholderEl.textContent = "";
+    text.split("").forEach(function (c, i) {
+      var s = document.createElement("span");
+      s.className = "ch";
+      s.textContent = c === " " ? " " : c;
+      s.style.animationDelay = i * 0.025 + "s";
+      placeholderEl.appendChild(s);
+    });
+  }
+
+  function hidePlaceholder() {
+    placeholderEl.classList.add("out");
+    [].forEach.call(placeholderEl.children, function (el, i) {
+      el.style.animationDelay = i * 0.015 + "s";
+    });
+  }
+
+  function cyclePlaceholder() {
+    if (input.value || document.activeElement === input) return;
+    hidePlaceholder();
+    setTimeout(function () {
+      phIndex = (phIndex + 1) % T.placeholders.length;
+      renderPlaceholder(T.placeholders[phIndex]);
+    }, 420);
+  }
+
+  function startPlaceholders() {
+    renderPlaceholder(T.placeholders[phIndex]);
+    stopPlaceholders();
+    phTimer = setInterval(cyclePlaceholder, 3400);
+  }
+
+  function stopPlaceholders() {
+    if (phTimer) clearInterval(phTimer);
+    phTimer = null;
+  }
+
+  function updatePlaceholderVisibility() {
+    var show = !input.value && document.activeElement !== input;
+    placeholderEl.style.display = show ? "" : "none";
+    if (show && !phTimer) startPlaceholders();
+    if (!show) stopPlaceholders();
+  }
+
+  input.addEventListener("focus", updatePlaceholderVisibility);
+  input.addEventListener("blur", updatePlaceholderVisibility);
+  input.addEventListener("input", updatePlaceholderVisibility);
+
+  /* ---------- Nachrichten ---------- */
   function addMessage(text, kind) {
     var el = document.createElement("div");
     el.className = "chat-msg chat-msg-" + kind;
@@ -106,21 +174,33 @@
 
   /* ---------- Öffnen / Schliessen ---------- */
   function open() {
+    lastFocus = document.activeElement;
     root.classList.add("open");
     toggle.setAttribute("aria-expanded", "true");
-    toggle.setAttribute("aria-label", isEN ? "Close chat" : "Chat schliessen");
+    // Seite hinter der Überlagerung ruhigstellen
+    if (window.__lenis) window.__lenis.stop();
+    document.body.style.overflow = "hidden";
     bootstrap();
-    setTimeout(function () { input.focus(); }, 300);
+    updatePlaceholderVisibility();
+    setTimeout(function () { input.focus(); }, 420);
   }
 
   function close() {
     root.classList.remove("open");
     toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-label", isEN ? "Open chat" : "Chat öffnen");
+    if (window.__lenis) window.__lenis.start();
+    document.body.style.overflow = "";
+    stopPlaceholders();
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    else toggle.focus();
   }
 
-  toggle.addEventListener("click", function () {
-    root.classList.contains("open") ? close() : open();
+  toggle.addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+
+  // Klick auf den unscharfen Hintergrund schliesst ebenfalls
+  overlay.addEventListener("mousedown", function (e) {
+    if (e.target === overlay) close();
   });
 
   document.addEventListener("keydown", function (e) {
@@ -141,6 +221,7 @@
 
     addMessage(message, "user");
     input.value = "";
+    updatePlaceholderVisibility();
     setBusy(true);
 
     var placeholder = addTyping();
@@ -166,10 +247,10 @@
         placeholder.remove();
         addMessage(reason, "error");
         setBusy(false);
+        input.focus();
         return;
       }
 
-      // Antwort zeichenweise einblenden
       var reader = res.body.getReader();
       var decoder = new TextDecoder();
       var first = true;
@@ -192,6 +273,7 @@
         placeholder.remove();
         addMessage(T.errEmpty, "error");
         setBusy(false);
+        input.focus();
         return;
       }
 
