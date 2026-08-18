@@ -17,29 +17,96 @@ const RETRYABLE = new Set([429, 500, 502, 503, 504]);
 
 const MAX_MESSAGE_LEN = 500;
 const MAX_HISTORY = 8;          // letzte N Nachrichten, hält den Prompt klein
-const RATE_LIMIT = 15;          // Anfragen pro IP
-const RATE_WINDOW_MS = 60_000;
 
-// Best-effort-Bremse gegen Missbrauch. Edge-Instanzen sind kurzlebig und nicht
-// geteilt, das hier ersetzt also kein echtes Rate-Limiting — es deckelt nur
-// offensichtliches Hämmern aus einer einzelnen Session ab.
-const hits = new Map();
+// Limits (per Env anpassbar, ohne Code-Änderung)
+const PER_IP_PER_MIN = Number(process.env.CHAT_PER_IP_PER_MIN || 8);
+const PER_IP_PER_DAY = Number(process.env.CHAT_PER_IP_PER_DAY || 40);
+const GLOBAL_PER_DAY = Number(process.env.CHAT_GLOBAL_PER_DAY || 500);
 
-function rateLimited(ip) {
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || now - entry.start > RATE_WINDOW_MS) {
-    hits.set(ip, { start: now, count: 1 });
+// Nur Anfragen von der eigenen Seite zulassen. Kommagetrennt erweiterbar;
+// Vercel-Preview-Domains werden automatisch mit akzeptiert.
+const ALLOWED_HOSTS = (process.env.CHAT_ALLOWED_HOSTS || "yannikackermann.ch")
+  .split(",")
+  .map((h) => h.trim().toLowerCase())
+  .filter(Boolean);
+
+function originAllowed(req) {
+  const raw = req.headers.get("origin") || req.headers.get("referer") || "";
+  if (!raw) return false;                     // direkte Skript-Aufrufe abweisen
+  let host;
+  try {
+    host = new URL(raw).hostname.toLowerCase();
+  } catch {
     return false;
   }
-  entry.count += 1;
-  return entry.count > RATE_LIMIT;
+  if (host === "localhost" || host === "127.0.0.1") return true;
+  if (host.endsWith(".vercel.app")) return true;
+  return ALLOWED_HOSTS.some((h) => host === h || host.endsWith("." + h));
 }
 
-function json(body, status) {
+/* ---------- Zähler ----------
+   Mit Vercel KV / Upstash (KV_REST_API_URL + KV_REST_API_TOKEN) sind die Zähler
+   dauerhaft und instanzübergreifend — das ist der wirksame Schutz. Ohne KV bleibt
+   nur ein Zähler im Arbeitsspeicher: Edge-Instanzen sind kurzlebig und werden
+   nicht geteilt, das bremst also lediglich offensichtliches Hämmern. */
+const KV_URL = process.env.KV_REST_API_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+const kvEnabled = Boolean(KV_URL && KV_TOKEN);
+
+const memory = new Map();
+
+function memoryCount(bucket, windowMs) {
+  const now = Date.now();
+  const entry = memory.get(bucket);
+  if (!entry || now - entry.start > windowMs) {
+    memory.set(bucket, { start: now, count: 1 });
+    return 1;
+  }
+  entry.count += 1;
+  return entry.count;
+}
+
+// Zählt hoch und gibt den neuen Stand zurück (KV: INCR + EXPIRE beim ersten Mal)
+async function bump(bucket, windowSec) {
+  if (!kvEnabled) return memoryCount(bucket, windowSec * 1000);
+  try {
+    const res = await fetch(`${KV_URL}/incr/${encodeURIComponent(bucket)}`, {
+      headers: { Authorization: `Bearer ${KV_TOKEN}` }
+    });
+    const data = await res.json();
+    const count = Number(data?.result ?? 0);
+    if (count === 1) {
+      await fetch(`${KV_URL}/expire/${encodeURIComponent(bucket)}/${windowSec}`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
+      });
+    }
+    return count;
+  } catch {
+    // KV nicht erreichbar: lieber durchlassen als den Chat lahmlegen
+    return memoryCount(bucket, windowSec * 1000);
+  }
+}
+
+const today = () => new Date().toISOString().slice(0, 10);
+
+// Gibt den Grund zurück, falls abgelehnt werden soll — sonst null
+async function overLimit(ip) {
+  const day = today();
+  const [perMin, perDay, global] = await Promise.all([
+    bump(`chat:min:${day}:${new Date().getUTCHours()}:${new Date().getUTCMinutes()}:${ip}`, 60),
+    bump(`chat:day:${day}:${ip}`, 86_400),
+    bump(`chat:global:${day}`, 86_400)
+  ]);
+  if (global > GLOBAL_PER_DAY) return "global";
+  if (perDay > PER_IP_PER_DAY) return "day";
+  if (perMin > PER_IP_PER_MIN) return "minute";
+  return null;
+}
+
+function json(body, status, extraHeaders) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "content-type": "application/json" }
+    headers: { "content-type": "application/json", ...(extraHeaders || {}) }
   });
 }
 
@@ -49,8 +116,16 @@ export default async function handler(req) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return json({ error: "not_configured" }, 503);
 
+  // Fremde Skripte draussen halten — der Chat ist nur für die eigene Seite da
+  if (!originAllowed(req)) return json({ error: "forbidden_origin" }, 403);
+
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (rateLimited(ip)) return json({ error: "rate_limited" }, 429);
+  const limit = await overLimit(ip);
+  if (limit) {
+    // Retry-After hilft dem Client, sinnvoll zu warten
+    const retry = limit === "minute" ? "60" : "3600";
+    return json({ error: "rate_limited", scope: limit }, 429, { "retry-after": retry });
+  }
 
   let payload;
   try {

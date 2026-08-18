@@ -1017,7 +1017,46 @@ em { font-style: italic; }
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--line);
   color: var(--ink);
+  white-space: normal;          /* formatierte Antworten bringen eigene Absaetze mit */
 }
+
+/* Markdown in Bot-Antworten */
+.chat-msg-bot p { margin: 0 0 0.7em; }
+.chat-msg-bot p:last-child { margin-bottom: 0; }
+
+.chat-msg-bot ul,
+.chat-msg-bot ol {
+  margin: 0 0 0.7em;
+  padding-left: 1.3em;
+  list-style: revert;           /* globales list-style:none hier zuruecknehmen */
+}
+
+.chat-msg-bot ul:last-child,
+.chat-msg-bot ol:last-child { margin-bottom: 0; }
+
+.chat-msg-bot li { margin-bottom: 0.3em; }
+.chat-msg-bot li::marker { color: var(--accent); }
+
+.chat-msg-bot strong { font-weight: 700; }
+.chat-msg-bot em { font-style: italic; }
+
+.chat-msg-bot code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--paper-soft);
+}
+
+.chat-msg-bot a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+
+.chat-msg-bot a:hover { background: var(--accent); }
 
 .chat-msg-user {
   align-self: flex-end;

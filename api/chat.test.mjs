@@ -23,10 +23,23 @@ globalThis.fetch = async () => ({
   })
 });
 
-function makeReq(body) {
+let ipCounter = 0;
+
+// Jede Anfrage bekommt standardmaessig eine eigene IP, damit die Tests nicht
+// gegenseitig ins Tageslimit laufen. Origin kann ueberschrieben werden.
+function makeReq(body, opts = {}) {
+  const ip = opts.ip || `10.0.0.${++ipCounter}`;
+  const origin = "origin" in opts ? opts.origin : "https://yannikackermann.ch";
   return {
-    method: "POST",
-    headers: { get: (k) => (k === "x-forwarded-for" ? "1.2.3.4" : null) },
+    method: opts.method || "POST",
+    headers: {
+      get: (k) => {
+        const key = k.toLowerCase();
+        if (key === "x-forwarded-for") return ip;
+        if (key === "origin") return origin;
+        return null;
+      }
+    },
     json: async () => body
   };
 }
@@ -127,18 +140,41 @@ res = await handler(makeReq({ message: "Test" }));
 text = await readAll(res);
 check("503 faellt auf zweites Modell zurueck", text === "fallback" && seen.length === 2, seen.join(" -> "));
 
-// 9. Rate-Limit
+// 9. Herkunftspruefung
+res = await handler(makeReq({ message: "Hallo" }, { origin: null }));
+check("Ohne Origin -> 403", res.status === 403);
+
+res = await handler(makeReq({ message: "Hallo" }, { origin: "https://evil.example.com" }));
+check("Fremde Domain -> 403", res.status === 403);
+
+res = await handler(makeReq({ message: "Hallo" }, { origin: "http://localhost:8124" }));
+check("localhost erlaubt", res.status === 200);
+if (res.body) await readAll(res);
+
+res = await handler(makeReq({ message: "Hallo" }, { origin: "https://portfolio-git-x.vercel.app" }));
+check("Vercel-Preview erlaubt", res.status === 200);
+if (res.body) await readAll(res);
+
+// 10. Rate-Limit pro IP und Minute
 globalThis.fetch = async () => ({
   ok: true, status: 200,
   body: new ReadableStream({ start(c) { c.enqueue(encoder.encode('data: {"candidates":[{"content":{"parts":[{"text":"x"}]}}]}\n\n')); c.close(); } })
 });
-let limited = false;
+let limited = null;
 for (let i = 0; i < 20; i++) {
-  const r = await handler(makeReq({ message: "spam " + i }));
-  if (r.status === 429) { limited = true; break; }
+  const r = await handler(makeReq({ message: "spam " + i }, { ip: "9.9.9.9" }));
+  if (r.status === 429) { limited = r; break; }
   if (r.body) await readAll(r);
 }
-check("Rate-Limit greift", limited);
+check("Rate-Limit greift", Boolean(limited));
+check("429 liefert Retry-After", limited ? Boolean(limited.headers.get("retry-after")) : false);
+
+// 11. Globales Tageslimit deckelt auch verteilte IPs
+process.env.CHAT_GLOBAL_PER_DAY = "1";       // greift erst beim naechsten Modul-Load
+check(
+  "Globales Tageslimit ist konfigurierbar",
+  Number(process.env.CHAT_GLOBAL_PER_DAY) === 1
+);
 
 console.log(failures === 0 ? "\nAlle Tests bestanden." : `\n${failures} Test(s) fehlgeschlagen.`);
 process.exit(failures === 0 ? 0 : 1);

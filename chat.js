@@ -151,11 +151,65 @@
 
   input.addEventListener("input", updatePlaceholderVisibility);
 
+  /* ---------- Markdown ----------
+     Bewusst minimal und sicher: der Text wird zuerst vollstaendig escaped,
+     erst danach werden die erlaubten Auszeichnungen wieder zu HTML. So kann
+     aus der Modellantwort kein Markup in die Seite gelangen. */
+  function escapeHtml(s) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function inline(s) {
+    return escapeHtml(s)
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s).,;:!?]|$)/g, "$1<em>$2</em>")
+      // Nur http/https verlinken — keine javascript:-URLs
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }
+
+  function renderMarkdown(text) {
+    var lines = String(text).split("\n");
+    var html = "";
+    var list = null;              // "ul" | "ol" | null
+
+    function closeList() {
+      if (list) { html += "</" + list + ">"; list = null; }
+    }
+
+    lines.forEach(function (line) {
+      var bullet = line.match(/^\s*[-*]\s+(.*)$/);
+      var numbered = line.match(/^\s*\d+[.)]\s+(.*)$/);
+
+      if (bullet) {
+        if (list !== "ul") { closeList(); html += "<ul>"; list = "ul"; }
+        html += "<li>" + inline(bullet[1]) + "</li>";
+      } else if (numbered) {
+        if (list !== "ol") { closeList(); html += "<ol>"; list = "ol"; }
+        html += "<li>" + inline(numbered[1]) + "</li>";
+      } else if (line.trim() === "") {
+        closeList();
+      } else {
+        closeList();
+        html += "<p>" + inline(line) + "</p>";
+      }
+    });
+
+    closeList();
+    return html;
+  }
+
   /* ---------- Nachrichten ---------- */
   function addMessage(text, kind) {
     var el = document.createElement("div");
     el.className = "chat-msg chat-msg-" + kind;
-    el.textContent = text;
+    if (kind === "bot") el.innerHTML = renderMarkdown(text);
+    else el.textContent = text;
     log.appendChild(el);
     log.scrollTop = log.scrollHeight;
     return el;
@@ -285,7 +339,14 @@
           first = false;
         }
         answer += piece;
+        // Waehrend des Streamens Klartext — halbfertiges Markdown wuerde sonst
+        // flackern (offene ** usw.). Formatiert wird am Ende einmal sauber.
         placeholder.textContent = answer;
+        log.scrollTop = log.scrollHeight;
+      }
+
+      if (answer.trim()) {
+        placeholder.innerHTML = renderMarkdown(answer);
         log.scrollTop = log.scrollHeight;
       }
 
