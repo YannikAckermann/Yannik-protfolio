@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=15">
   <link rel="preload" as="image" href="assets/Yannik-lookingup.webp">
   <link rel="preload" as="image" href="assets/logo.webp">
 </head>
@@ -74,8 +74,7 @@
         <div class="hero-left">
           <p class="hero-left-text">
             Apprentice application developer at Swisscom — full-stack,
-            AI/ML integration and MCP. Three project rotations,
-            one platform, many lessons learned.
+            AI/ML integration and MCP. Leads Team Halo with 33 apprentices.
           </p>
           <a href="#manifest" class="hero-readmore" data-hover>Learn more</a>
         </div>
@@ -141,8 +140,12 @@
               <span class="fact-label">Project rotations<br>at Swisscom</span>
             </div>
             <div class="fact" data-reveal>
-              <span class="fact-num" data-count="10">0</span>
+              <span class="fact-num" data-count="10" data-suffix="+">0</span>
               <span class="fact-label">Applications<br>built</span>
+            </div>
+            <div class="fact" data-reveal>
+              <span class="fact-num" data-count="33">0</span>
+              <span class="fact-label">Apprentices in the<br>team he now leads</span>
             </div>
           </div>
         </div>
@@ -253,9 +256,10 @@
               <p class="exp-desc">
                 Full-stack with a focus on AI integration and machine learning:
                 MCP client/server implementations, CRUD apps with React &amp; Spring Boot,
-                AWS deployments, ML models.
+                AWS deployments, ML models. After a year on the team I took over
+                <strong>leading Team Halo</strong> and now lead 33 apprentices.
               </p>
-              <span class="exp-meta">3rd project rotation · Swisscom · since July 2025</span>
+              <span class="exp-meta">Team lead · 3rd project rotation · Swisscom · since July 2025</span>
             </div>
           </div>
           <div class="exp-item" data-reveal>
@@ -322,9 +326,9 @@
       <img class="statement-bg" src="assets/skyline.webp" loading="lazy" decoding="async" alt="" aria-hidden="true">
       <div class="statement-overlay" aria-hidden="true"></div>
       <p class="statement-text" data-reveal>
-        “It is not because things are difficult that we do not dare —<br>
-        it is because we do not dare that <em>they are difficult</em>.”
-        <span class="statement-author">Seneca</span>
+        “Aim for the moon. <br>
+        If you miss, you may hit a <em>star</em>.”
+        <span class="statement-author">W. Clement Stone</span>
       </p>
     </section>
 
@@ -344,6 +348,11 @@
         <a href="https://www.linkedin.com/in/yannik-ackermann-5a3a10322/" target="_blank" rel="noopener" data-hover>LinkedIn ↗</a>
         <a href="https://code.swisscom.com/Yannik.Ackermann" target="_blank" rel="noopener" data-hover>GitLab ↗</a>
       </div>
+      <a class="contact-cv" href="assets/lebenslauf.pdf" download data-hover>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download CV
+        <span class="contact-cv-note">PDF · still a placeholder</span>
+      </a>
       <div class="contact-refs">
         <p>References: <strong>Nithursan Naguleswaran</strong> (LB) · <strong>Sven Waser</strong> (host)</p>
       </div>
@@ -389,7 +398,10 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script src="script.js?v=3"></script>
-  <script src="chat.js?v=5"></script>
+  <script src="script.js?v=4"></script>
+  <script src="chat.js?v=6"></script>
+
+  <!-- Vercel Analytics (statische Variante, kein npm-Paket noetig) -->
+  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

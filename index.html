@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=15">
   <link rel="preload" as="image" href="assets/Yannik-lookingup.webp">
   <link rel="preload" as="image" href="assets/logo.webp">
 </head>
@@ -74,8 +74,7 @@
         <div class="hero-left">
           <p class="hero-left-text">
             Lernender Applikationsentwickler bei Swisscom — Full-Stack,
-            AI/ML-Integration und MCP. Drei Projekteinsätze,
-            eine Plattform, viele gelernte Lektionen.
+            AI/ML-Integration und MCP. Leitet Team Halo mit 33 Lernenden.
           </p>
           <a href="#manifest" class="hero-readmore" data-hover>Mehr erfahren</a>
         </div>
@@ -141,8 +140,12 @@
               <span class="fact-label">Projekteinsätze<br>bei Swisscom</span>
             </div>
             <div class="fact" data-reveal>
-              <span class="fact-num" data-count="10">0</span>
+              <span class="fact-num" data-count="10" data-suffix="+">0</span>
               <span class="fact-label">Umgesetzte<br>Applikationen</span>
+            </div>
+            <div class="fact" data-reveal>
+              <span class="fact-num" data-count="33">0</span>
+              <span class="fact-label">Lernende im Team,<br>das er heute leitet</span>
             </div>
           </div>
         </div>
@@ -253,9 +256,11 @@
               <p class="exp-desc">
                 Full-Stack mit Schwerpunkt AI-Integration und Machine Learning:
                 MCP-Client/Server-Implementierungen, CRUD-Apps mit React &amp; Spring Boot,
-                AWS-Deployments, ML-Modelle.
+                AWS-Deployments, ML-Modelle. Nach einem Jahr im Team habe ich die
+                <strong>Leitung von Team Halo</strong> übernommen und führe heute
+                33 Lernende.
               </p>
-              <span class="exp-meta">3. Projekteinsatz · Swisscom · seit Juli 2025</span>
+              <span class="exp-meta">Teamleitung · 3. Projekteinsatz · Swisscom · seit Juli 2025</span>
             </div>
           </div>
           <div class="exp-item" data-reveal>
@@ -324,7 +329,7 @@
       <p class="statement-text" data-reveal>
         «Aim for the moon. <br>
         If you miss, you may hit a <em>star</em>.»
-        <span class="statement-author">Seneca</span>
+        <span class="statement-author">W. Clement Stone</span>
       </p>
     </section>
 
@@ -344,6 +349,11 @@
         <a href="https://www.linkedin.com/in/yannik-ackermann-5a3a10322/" target="_blank" rel="noopener" data-hover>LinkedIn ↗</a>
         <a href="https://code.swisscom.com/Yannik.Ackermann" target="_blank" rel="noopener" data-hover>GitLab ↗</a>
       </div>
+      <a class="contact-cv" href="assets/lebenslauf.pdf" download data-hover>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Lebenslauf herunterladen
+        <span class="contact-cv-note">PDF · noch ein Platzhalter</span>
+      </a>
       <div class="contact-refs">
         <p>Referenzen: <strong>Nithursan Naguleswaran</strong> (LB) · <strong>Sven Waser</strong> (Host)</p>
       </div>
@@ -389,7 +399,10 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script src="script.js?v=3"></script>
-  <script src="chat.js?v=5"></script>
+  <script src="script.js?v=4"></script>
+  <script src="chat.js?v=6"></script>
+
+  <!-- Vercel Analytics (statische Variante, kein npm-Paket noetig) -->
+  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

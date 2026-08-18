@@ -38,7 +38,8 @@ const TYPES = {
   ".jpeg": "image/jpeg",
   ".png": "image/png",
   ".svg": "image/svg+xml",
-  ".ico": "image/x-icon"
+  ".ico": "image/x-icon",
+  ".pdf": "application/pdf"
 };
 
 /* ---------- Node-Request in Web-Request übersetzen ---------- */

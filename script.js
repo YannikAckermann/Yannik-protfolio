@@ -226,7 +226,9 @@
   /* ---------- Counters ---------- */
   document.querySelectorAll("[data-count]").forEach(function (el) {
     var target = parseInt(el.getAttribute("data-count"), 10);
-    var suffix = target >= 10 ? "+" : "";
+    // Suffix explizit per data-suffix — nicht aus der Groesse raten, sonst
+    // wuerde aus 33 gefuehrten Lernenden ein irrefuehrendes "33+".
+    var suffix = el.getAttribute("data-suffix") || "";
     if (prefersReduced) { el.textContent = target + suffix; return; }
     var obj = { v: 0 };
     ScrollTrigger.create({
