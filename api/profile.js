@@ -7,7 +7,9 @@ export const PROFILE = `
 # Yannik Ackermann — Profil
 
 ## Person
+- Glücklich vergeben an Leandra Redjepi. (nicht single)
 - Lernender Informatiker EFZ, Fachrichtung Applikationsentwicklung, bei Swisscom (seit 2024)
+- Aktuell im 3. Lehrjahr
 - Standort: Zürich, Schweiz
 - Verfügbar für einen neuen Projekteinsatz ab 01.02.2027
 - Kontakt: yannik.ackermann@swisscom.com, +41 79 569 42 76
@@ -16,6 +18,22 @@ export const PROFILE = `
 - GitHub: https://github.com/YannikAckermann
 - Sprachen: Deutsch (Muttersprache), Englisch
 - Freizeit: Torhüter beim FC Sarmenstorf
+
+## Verfügbarkeit und Zeitplan
+- Lehrabschluss: 31.07.2028. Bis dahin steht er für Projekteinsätze zur Verfügung.
+- Der aktuelle Einsatz (Team Halo) läuft bis Ende Januar 2027 — ab dem 01.02.2027
+  ist er für einen neuen Einsatz frei.
+- Anwesenheit heute: ein Schultag pro Woche (Montag, Berufsmaturitätsschule),
+  die übrigen vier Tage im Projekt.
+- Anwesenheit ab Februar 2027: zwei Schultage pro Woche (Montag und Dienstag),
+  die übrigen drei Tage im Projekt. Das betrifft also genau den nächsten Einsatz.
+- Nach dem Lehrabschluss: geplant ist ein halbes Jahr Anstellung bei Swisscom,
+  danach die Rekrutenschule im Bereich Cybersecurity. Was danach kommt, ist offen.
+
+## Interessen für den nächsten Einsatz
+Yannik möchte gerne in die Cybersecurity eintauchen. Er nimmt am SPARC-Programm teil,
+einem Vorbereitungsprogramm des Militärs, das ihm gefällt und sein Interesse an
+diesem Bereich verstärkt hat.
 
 ## Selbstverständnis
 Baut Anwendungen, die AI wirklich nutzen — nicht als Buzzword, sondern als Werkzeug.
@@ -64,7 +82,7 @@ AI-Assistenten sicher auf Unternehmens-APIs zugreifen.
 - Low-Code: Power Apps, Power Automate
 
 ## Ausbildung
-- Informatiker EFZ Applikationsentwicklung, Swisscom, seit 2024
+- Informatiker EFZ Applikationsentwicklung, Swisscom, 2024 bis 31.07.2028 (3. Lehrjahr)
 - Berufsmaturität, Winterthur (berufsbegleitend)
 - Kaggle LM Course (abgeschlossen)
 
