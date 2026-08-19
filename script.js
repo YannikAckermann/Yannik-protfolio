@@ -177,39 +177,6 @@
     preloader.style.display = "none";
   }
 
-  /* ---------- Vorstellungsvideo ----------
-     Vor dem Start: Standbild in Schwarz-Weiss mit grossem Knopf, keine
-     Bedienleiste. Beim Start kommt die Farbe und die native Steuerung. */
-  (function () {
-    var section = document.querySelector(".intro-video");
-    if (!section) return;
-    var video = section.querySelector(".intro-video-el");
-    var playBtn = section.querySelector(".intro-video-play");
-    if (!video || !playBtn) return;
-
-    playBtn.addEventListener("click", function () {
-      video.controls = true;
-      var started = video.play();
-      // play() liefert ein Promise; scheitert es (z. B. Datei fehlt), soll
-      // der Knopf sichtbar bleiben statt still zu verschwinden.
-      if (started && typeof started.catch === "function") {
-        started.catch(function () {
-          section.classList.remove("playing");
-          video.controls = false;
-        });
-      }
-    });
-
-    video.addEventListener("play", function () { section.classList.add("playing"); });
-
-    // Nach dem Ende zurueck zum Ausgangszustand
-    video.addEventListener("ended", function () {
-      section.classList.remove("playing");
-      video.controls = false;
-      video.currentTime = 0;
-    });
-  })();
-
   /* ---------- Marquee ---------- */
   var track = document.querySelector(".marquee-track");
   if (track && !prefersReduced) {
