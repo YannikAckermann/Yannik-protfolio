@@ -7,3 +7,10 @@ node_modules/
 .DS_Store
 
 scritps/
+# Video-Rohmaterial (gross) — nur die kodierte Fassung kommt ins Repo
+assets/copy_*
+*.MOV
+crop_*.jpg
+start_*.jpg
+f0*.jpg
+poster_preview.jpg

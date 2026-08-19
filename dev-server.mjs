@@ -39,7 +39,10 @@ const TYPES = {
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
-  ".pdf": "application/pdf"
+  ".pdf": "application/pdf",
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
+  ".woff2": "font/woff2"
 };
 
 /* ---------- Node-Request in Web-Request übersetzen ---------- */
