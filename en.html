@@ -23,11 +23,17 @@
   <link rel="alternate" hreflang="de" href="https://www.yannikackermann.ch/">
   <link rel="alternate" hreflang="en" href="https://www.yannikackermann.ch/en.html">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=15">
-  <link rel="preload" as="image" href="assets/Yannik-lookingup.webp">
+  <!-- Fonts served locally instead of fonts.googleapis.com: removes the
+       render-blocking third-party request including DNS and TLS -->
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="assets/fonts/k3kPo8UDI-1M0wlSV9XAw6lQkqWY8Q82sLydOxKsv4Rn.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="assets/fonts/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu0-K6z9mXg.woff2">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="style.css?v=16">
+  <link rel="preload" as="image" href="assets/Yannik-lookingup-1100.webp"
+        imagesrcset="assets/Yannik-lookingup-700.webp 467w, assets/Yannik-lookingup-1100.webp 733w, assets/Yannik-lookingup.webp 933w"
+        imagesizes="(max-width: 900px) 300px, 440px">
   <link rel="preload" as="image" href="assets/logo.webp">
 </head>
 <body>
@@ -81,9 +87,13 @@
 
         <div class="hero-center">
           <div class="hero-circle" aria-hidden="true"></div>
-          <img class="hero-img" src="assets/Yannik-lookingup.webp"
-               alt="Yannik Ackermann as a marble statue" fetchpriority="high"
-               width="933" height="1400">
+          <img class="hero-img" src="assets/Yannik-lookingup-1100.webp"
+               srcset="assets/Yannik-lookingup-700.webp 467w,
+                       assets/Yannik-lookingup-1100.webp 733w,
+                       assets/Yannik-lookingup.webp 933w"
+               sizes="(max-width: 900px) 300px, 440px"
+               alt="Yannik Ackermann" fetchpriority="high"
+               width="733" height="1100">
         </div>
 
         <div class="hero-right">
@@ -395,11 +405,11 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script src="script.js?v=4"></script>
-  <script src="chat.js?v=6"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script defer src="script.js?v=4"></script>
+  <script defer src="chat.js?v=6"></script>
 
   <!-- Vercel Analytics (statische Variante, kein npm-Paket noetig) -->
   <script defer src="/_vercel/insights/script.js"></script>

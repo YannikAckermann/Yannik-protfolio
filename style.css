@@ -7,7 +7,9 @@
   --paper: #F3F0EA;
   --paper-soft: #EDE9E1;
   --ink: #161513;
-  --muted: #6E6A62;
+  /* Etwas dunkler als urspruenglich (#6E6A62): auf --paper-soft ergab der
+     alte Wert nur 4.45:1 und fiel damit knapp durch die WCAG-Pruefung. */
+  --muted: #68645C;
   --accent: #F0C020;          /* warmes Gelb, Port der yellow-400-Kreisfläche */
   --line: rgba(22, 21, 19, 0.16);
   --font-head: "Archivo", sans-serif;
