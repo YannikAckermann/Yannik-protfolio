@@ -6,8 +6,12 @@ export const config = { runtime: "edge" };
 // Gemini liefert bei Lastspitzen 503; dann wird der Reihe nach das nächste
 // Modell probiert, statt dem Besucher einen Fehler zu zeigen.
 const MODELS = [
-  ...new Set([process.env.GEMINI_MODEL || "gemini-flash-latest", "gemini-3-flash-preview"])
+  ...new Set([process.env.GEMINI_MODEL || "gemini-3-flash-preview", "gemini-flash-latest"])
 ];
+
+// Ein überlastetes/hängendes Modell soll nicht die ganze Anfrage blockieren:
+// nach diesem Timeout wird der Versuch abgebrochen und das nächste Modell probiert.
+const MODEL_TIMEOUT_MS = Number(process.env.CHAT_MODEL_TIMEOUT_MS || 6000);
 
 const endpointFor = (model) =>
   `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
@@ -169,16 +173,23 @@ export default async function handler(req) {
 
   for (const model of MODELS) {
     let res;
+    // Bricht den Versuch ab, wenn bis zum Timeout kein Antwort-Header (also kein
+    // Stream-Start) kommt — dann fällt die Schleife auf das nächste Modell zurück.
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), MODEL_TIMEOUT_MS);
     try {
       res = await fetch(endpointFor(model), {
         method: "POST",
         headers: { "content-type": "application/json", "x-goog-api-key": key },
-        body
+        body,
+        signal: controller.signal
       });
     } catch (err) {
       lastStatus = 0;
-      lastDetail = String(err?.message || err);
+      lastDetail = controller.signal.aborted ? `timeout nach ${MODEL_TIMEOUT_MS}ms` : String(err?.message || err);
       continue;
+    } finally {
+      clearTimeout(timer);
     }
 
     if (res.ok && res.body) {
