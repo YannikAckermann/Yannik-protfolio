@@ -5,7 +5,7 @@
  *
  *   1. .env anlegen (siehe .env.example) mit GEMINI_API_KEY
  *   2. node dev-server.mjs
- *   3. http://localhost:8124 öffnen
+ *   3. http://localhost:8123 öffnen
  */
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
@@ -14,7 +14,7 @@ import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL(".", import.meta.url));
-const PORT = Number(process.env.PORT) || 8124;
+const PORT = Number(process.env.PORT) || 8123;
 
 /* ---------- .env laden (ohne Zusatzpaket) ---------- */
 try {

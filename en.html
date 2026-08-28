@@ -30,7 +30,7 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
         href="assets/fonts/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu0-K6z9mXg.woff2">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=20">
+  <link rel="stylesheet" href="style.css?v=30">
   <link rel="preload" as="image" href="assets/Yannik-lookingup-1100.webp"
         imagesrcset="assets/Yannik-lookingup-700.webp 467w, assets/Yannik-lookingup-1100.webp 733w, assets/Yannik-lookingup.webp 933w"
         imagesizes="(max-width: 900px) 300px, 440px">
@@ -66,7 +66,6 @@
     <nav class="menu-overlay-nav">
       <a href="#projekte">Projects</a>
       <a href="#erfahrung">Journey</a>
-      <a href="#skills">Skills</a>
       <a href="#kontakt">Contact</a>
     </nav>
   </div>
@@ -160,7 +159,7 @@
       <div class="projects-pin">
         <div class="projects-head">
           <span class="section-tag">02 — Selected work</span>
-          <span class="projects-counter"><span class="projects-current">01</span> / 06</span>
+          <span class="projects-counter"><span class="projects-current">01</span> / 05</span>
         </div>
         <div class="projects-track">
 
@@ -172,14 +171,17 @@
             <div class="panel-intro-copy">
               <h2 class="panel-intro-title">Selected Work</h2>
               <p class="panel-intro-sub">
-                Four projects from three rotations at Swisscom — from low-code
-                to a full platform. <em>Keep scrolling →</em>
+                Five pieces of work from training and Swisscom rotations — from AI interfaces
+                to platform engineering and automated processes. <em>Keep scrolling →</em>
               </p>
             </div>
           </article>
 
           <article class="panel">
             <span class="panel-num">01</span>
+            <figure class="panel-media panel-media-shot">
+              <img src="assets/shot-simultan.webp" loading="lazy" decoding="async" alt="Simultaneous Translation start screen with language selection and context field">
+            </figure>
             <div class="panel-body">
               <span class="panel-cat">Live translation · current project</span>
               <h3 class="panel-title">Simultaneous Translation</h3>
@@ -202,6 +204,9 @@
 
           <article class="panel">
             <span class="panel-num">02</span>
+            <figure class="panel-media panel-media-shot">
+              <img src="assets/shot-mcp-home.webp" loading="lazy" decoding="async" alt="MCP Gateway overview with gateways and MCP servers">
+            </figure>
             <div class="panel-body">
               <span class="panel-cat">Go · Next.js · Full-stack</span>
               <h3 class="panel-title">MCP Gateway</h3>
@@ -226,6 +231,13 @@
 
           <article class="panel">
             <span class="panel-num">03</span>
+            <div class="panel-media panel-media-system" aria-hidden="true">
+              <div class="system-window">
+                <span></span><span></span><span></span>
+                <div class="system-chat system-chat-user">Plan my sprint</div>
+                <div class="system-chat system-chat-bot">3 tasks created · priorities set</div>
+              </div>
+            </div>
             <div class="panel-body">
               <span class="panel-cat">AI · Full-stack</span>
               <h3 class="panel-title">AI chatbot todo app</h3>
@@ -239,6 +251,10 @@
 
           <article class="panel">
             <span class="panel-num">04</span>
+            <div class="panel-media panel-media-system panel-media-ml" aria-hidden="true">
+              <div class="metric-card"><strong>72%</strong><span>Model confidence</span></div>
+              <div class="metric-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
             <div class="panel-body">
               <span class="panel-cat">Machine learning</span>
               <h3 class="panel-title">Football predictions</h3>
@@ -255,6 +271,13 @@
 
           <article class="panel">
             <span class="panel-num">05</span>
+            <div class="panel-media panel-media-system panel-media-lowcode" aria-hidden="true">
+              <div class="flow-node">Power App</div>
+              <div class="flow-line"></div>
+              <div class="flow-node muted">Approval</div>
+              <div class="flow-line"></div>
+              <div class="flow-node">Automate</div>
+            </div>
             <div class="panel-body">
               <span class="panel-cat">Low-code · Power Platform</span>
               <h3 class="panel-title">Power Apps suite</h3>
@@ -305,45 +328,12 @@
               <h3 class="exp-title">Apps Team</h3>
               <p class="exp-desc">
                 Interactive applications — memory game, help resources for
-                customer support. My entry into the craft of frontend work.
+                customer support. My entry into the craft of frontend development.
               </p>
               <span class="exp-meta">1st project rotation · Swisscom · Jul 2024 – Jan 2025</span>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ===== SKILLS ===== -->
-    <section class="skills" id="skills">
-      <span class="section-tag">04 — Skills</span>
-      <ul class="skills-list">
-        <li class="skills-row" data-reveal>
-          <span class="skills-domain">Frontend</span>
-          <span class="skills-items">React · TypeScript · Next.js · HTML/CSS · Tailwind</span>
-        </li>
-        <li class="skills-row" data-reveal>
-          <span class="skills-domain">Backend</span>
-          <span class="skills-items">Spring Boot · Java · Go · Python · FastAPI</span>
-        </li>
-        <li class="skills-row" data-reveal>
-          <span class="skills-domain">AI &amp; Data</span>
-          <span class="skills-items">MCP · Machine Learning · LLM integration</span>
-        </li>
-        <li class="skills-row" data-reveal>
-          <span class="skills-domain">Cloud &amp; Infra</span>
-          <span class="skills-items">AWS · Docker · PostgreSQL · GitLab CI</span>
-        </li>
-        <li class="skills-row" data-reveal>
-          <span class="skills-domain">Low-Code</span>
-          <span class="skills-items">Power Apps · Power Automate</span>
-        </li>
-      </ul>
-      <div class="edu" data-reveal>
-        <p>
-          <strong>Education:</strong> Federal VET diploma in software development (Swisscom, since 2024) ·
-          Vocational baccalaureate, Winterthur 
-        </p>
       </div>
     </section>
 
@@ -360,7 +350,7 @@
 
     <!-- ===== CONTACT ===== -->
     <section class="contact" id="kontakt">
-      <span class="section-tag">05 — Contact</span>
+      <span class="section-tag">04 — Contact</span>
       <div class="contact-stage">
         <div class="contact-circle" aria-hidden="true"></div>
         <a href="mailto:yannik.ackermann@swisscom.com" class="contact-giant" data-hover>
@@ -414,6 +404,9 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
 
+      <!-- 3D robot (lazy-loaded on first chat open) -->
+      <div class="chat-robot" aria-hidden="true"></div>
+
       <div class="chat-stage">
         <div class="chat-log" aria-live="polite" data-lenis-prevent></div>
 
@@ -438,8 +431,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script defer src="script.js?v=13"></script>
-  <script defer src="chat.js?v=6"></script>
+  <script defer src="script.js?v=15"></script>
+  <script defer src="chat.js?v=11"></script>
 
   <!-- Vercel Analytics (statische Variante, kein npm-Paket noetig) -->
   <script defer src="/_vercel/insights/script.js"></script>

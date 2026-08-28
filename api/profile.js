@@ -45,7 +45,7 @@ AI-Assistenten sicher auf Unternehmens-APIs zugreifen.
 ## Werdegang (Projekteinsätze bei Swisscom)
 1. **Apps Team** (Juli 2024 – Januar 2025, 1. Einsatz)
    Interaktive Applikationen: Memory Game, Hilferessourcen für den Kundensupport.
-   Einstieg ins Frontend-Handwerk. Technologien: JavaScript, HTML/CSS.
+   Einstieg ins Frontend-Development. Technologien: JavaScript, HTML/CSS.
 2. **Power Builders** (Januar 2025 – Juli 2025, 2. Einsatz)
    Low-Code-Entwicklung mit Microsoft Power Apps: Super League App,
    Zertifikatsverwaltung für das CLA-Team, Workflow-Automatisierung mit Power Automate.

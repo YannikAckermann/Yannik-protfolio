@@ -283,7 +283,8 @@
         anticipatePin: 1,
         onUpdate: function (self) {
           if (currentEl) {
-            var idx = Math.min(panels.length, Math.max(1, Math.round(self.progress * (panels.length - 1)) + 1));
+            var total = Math.max(1, panels.length - 1);
+            var idx = Math.min(total, Math.max(1, Math.round(self.progress * total)));
             currentEl.textContent = pad2(idx);
           }
         }
@@ -310,6 +311,7 @@
   (function () {
     var view = document.querySelector(".shots-view");
     var knoepfe = document.querySelectorAll(".panel-shots");
+    var previews = document.querySelectorAll(".panel-media-shot");
     if (!view || !knoepfe.length) return;
 
     var bild = view.querySelector(".shots-img");
@@ -335,7 +337,7 @@
       weiter.disabled = index === bilder.length - 1;
     }
 
-    function oeffne(btn) {
+    function oeffne(btn, trigger) {
       bilder = (btn.dataset.shots || "").split(",").filter(Boolean);
       texte = (btn.dataset.captions || "").split("|");
       if (!bilder.length) return;
@@ -344,6 +346,12 @@
       titel.textContent = btn.dataset.title || "";
       view.classList.toggle("single", bilder.length === 1);
       zeige(0);
+
+      if (trigger) {
+        var rect = trigger.getBoundingClientRect();
+        view.style.setProperty("--shot-origin-x", (rect.left + rect.width / 2) + "px");
+        view.style.setProperty("--shot-origin-y", (rect.top + rect.height / 2) + "px");
+      }
 
       view.hidden = false;
       // Umbruch erzwingen statt requestAnimationFrame: das laeuft in
@@ -365,7 +373,23 @@
     }
 
     knoepfe.forEach(function (btn) {
-      btn.addEventListener("click", function () { oeffne(btn); });
+      btn.addEventListener("click", function () { oeffne(btn, btn); });
+    });
+
+    previews.forEach(function (preview) {
+      var btn = preview.closest(".panel") && preview.closest(".panel").querySelector(".panel-shots");
+      if (!btn) return;
+      preview.tabIndex = 0;
+      preview.setAttribute("role", "button");
+      preview.setAttribute("data-hint", document.documentElement.lang === "en" ? "Open image" : "Bild öffnen");
+      preview.setAttribute("aria-label", btn.dataset.title + " öffnen");
+      preview.addEventListener("click", function () { oeffne(btn, preview); });
+      preview.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          oeffne(btn, preview);
+        }
+      });
     });
 
     zurueck.addEventListener("click", function () { zeige(index - 1); });

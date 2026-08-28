@@ -88,11 +88,44 @@
   var sendBtn = root.querySelector(".chat-send");
   var chips = root.querySelector(".chat-suggestions");
   var placeholderEl = root.querySelector(".chat-placeholder");
+  var robot = root.querySelector(".chat-robot");
 
   var history = [];
   var busy = false;
   var started = false;
   var lastFocus = null;
+  var robotLoaded = false;
+
+  /* ---------- 3D-Roboter ----------
+     Nur der Roboter (Spline-Szene) — kein Card/Spotlight-Rahmen. Der schwere
+     Spline-Runtime wird erst beim ersten Oeffnen des Chats geladen, damit der
+     Seitenaufbau nicht ausgebremst wird. Auf dem Handy bleibt er ganz aus. */
+  function loadRobot() {
+    if (robotLoaded || !robot) return;
+    if (window.matchMedia("(max-width: 860px)").matches) return;
+    robotLoaded = true;
+
+    var viewer = document.createElement("spline-viewer");
+    viewer.setAttribute("url", "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode");
+    viewer.setAttribute("loading-anim-type", "none");
+    robot.appendChild(viewer);
+
+    if (!document.querySelector('script[data-spline-viewer]')) {
+      var s = document.createElement("script");
+      s.type = "module";
+      s.src = "https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js";
+      s.setAttribute("data-spline-viewer", "");
+      document.head.appendChild(s);
+    }
+
+    // Spline-Wasserzeichen im Shadow-DOM ausblenden, sobald es existiert.
+    var tries = 0;
+    var hideLogo = setInterval(function () {
+      var logo = viewer.shadowRoot && viewer.shadowRoot.querySelector("#logo");
+      if (logo) { logo.style.display = "none"; clearInterval(hideLogo); }
+      if (++tries > 40) clearInterval(hideLogo);
+    }, 250);
+  }
 
   var hint = toggle.querySelector(".chat-toggle-hint");
   if (hint) hint.textContent = T.openLabel;
@@ -254,6 +287,7 @@
     // Seite hinter der Überlagerung ruhigstellen
     if (window.__lenis) window.__lenis.stop();
     document.body.style.overflow = "hidden";
+    loadRobot();
     bootstrap();
     updatePlaceholderVisibility();
     setTimeout(function () { input.focus(); }, 420);
