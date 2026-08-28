@@ -580,12 +580,47 @@ em { font-style: italic; }
   outline: none;
 }
 
+.panel-media-stack {
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.panel-media-stack img {
+  position: relative;
+  z-index: 3;
+  border: 1px solid rgba(22, 21, 19, 0.14);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: 0 18px 34px rgba(22, 21, 19, 0.12);
+}
+
+.panel-stack-card {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(22, 21, 19, 0.16);
+  border-radius: 8px;
+  background: rgba(243, 240, 234, 0.92);
+  box-shadow: 0 14px 30px rgba(22, 21, 19, 0.1);
+}
+
+.panel-stack-card.stack-one {
+  z-index: 2;
+  transform: translate(12px, 12px);
+}
+
+.panel-stack-card.stack-two {
+  z-index: 1;
+  transform: translate(24px, 24px);
+  opacity: 0.72;
+}
+
 .panel-media-shot::before {
   content: attr(data-hint);
   position: absolute;
   right: 14px;
   bottom: 14px;
-  z-index: 2;
+  z-index: 5;
   padding: 8px 12px;
   border-radius: 999px;
   background: rgba(22, 21, 19, 0.88);

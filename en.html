@@ -30,7 +30,7 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
         href="assets/fonts/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu0-K6z9mXg.woff2">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=30">
+  <link rel="stylesheet" href="style.css?v=32">
   <link rel="preload" as="image" href="assets/Yannik-lookingup-1100.webp"
         imagesrcset="assets/Yannik-lookingup-700.webp 467w, assets/Yannik-lookingup-1100.webp 733w, assets/Yannik-lookingup.webp 933w"
         imagesizes="(max-width: 900px) 300px, 440px">
@@ -159,7 +159,7 @@
       <div class="projects-pin">
         <div class="projects-head">
           <span class="section-tag">02 — Selected work</span>
-          <span class="projects-counter"><span class="projects-current">01</span> / 05</span>
+          <span class="projects-counter"><span class="projects-current">01</span> / 04</span>
         </div>
         <div class="projects-track">
 
@@ -171,7 +171,7 @@
             <div class="panel-intro-copy">
               <h2 class="panel-intro-title">Selected Work</h2>
               <p class="panel-intro-sub">
-                Five pieces of work from training and Swisscom rotations — from AI interfaces
+                Four pieces of work from training and Swisscom rotations — from AI interfaces
                 to platform engineering and automated processes. <em>Keep scrolling →</em>
               </p>
             </div>
@@ -179,7 +179,10 @@
 
           <article class="panel">
             <span class="panel-num">01</span>
-            <figure class="panel-media panel-media-shot">
+            <figure class="panel-media panel-media-shot"
+                    data-shots="assets/shot-simultan.webp"
+                    data-captions="Start screen with language selection and context field"
+                    data-title="Simultaneous Translation">
               <img src="assets/shot-simultan.webp" loading="lazy" decoding="async" alt="Simultaneous Translation start screen with language selection and context field">
             </figure>
             <div class="panel-body">
@@ -192,19 +195,17 @@
                 gets them right.
               </p>
               <ul class="panel-tags"><li>Speech recognition</li><li>Translation</li><li>Real time</li></ul>
-              <button class="panel-shots" type="button"
-                      data-shots="assets/shot-simultan.webp"
-                      data-captions="Start screen with language selection and context field"
-                      data-title="Simultaneous Translation">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                View image
-              </button>
             </div>
           </article>
 
           <article class="panel">
             <span class="panel-num">02</span>
-            <figure class="panel-media panel-media-shot">
+            <figure class="panel-media panel-media-shot panel-media-stack"
+                    data-shots="assets/shot-mcp-home.webp,assets/shot-mcp-config.webp,assets/shot-mcp-add.webp"
+                    data-captions="Overview of gateways and MCP servers|Gateway configuration: name, location, visibility|Adding an MCP server to a gateway"
+                    data-title="MCP Gateway">
+              <span class="panel-stack-card stack-one" aria-hidden="true"></span>
+              <span class="panel-stack-card stack-two" aria-hidden="true"></span>
               <img src="assets/shot-mcp-home.webp" loading="lazy" decoding="async" alt="MCP Gateway overview with gateways and MCP servers">
             </figure>
             <div class="panel-body">
@@ -216,13 +217,6 @@
                 with SSO and gRPC.
               </p>
               <ul class="panel-tags"><li>Go</li><li>gRPC</li><li>Next.js</li><li>TypeScript</li></ul>
-              <button class="panel-shots" type="button"
-                      data-shots="assets/shot-mcp-home.webp,assets/shot-mcp-config.webp,assets/shot-mcp-add.webp"
-                      data-captions="Overview of gateways and MCP servers|Gateway configuration: name, location, visibility|Adding an MCP server to a gateway"
-                      data-title="MCP Gateway">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                View 3 images
-              </button>
               <a class="panel-link" href="https://mcp-gateway-frontend.dev-scapp-corp.swisscom.com/de" target="_blank" rel="noopener" data-hover>
                 View live ↗ <span class="panel-link-note">Swisscom corporate network only</span>
               </a>
@@ -266,26 +260,6 @@
               <a class="panel-link" href="https://github.com/YannikAckermann/Country-prediction" target="_blank" rel="noopener" data-hover>
                 GitHub repo ↗
               </a>
-            </div>
-          </article>
-
-          <article class="panel">
-            <span class="panel-num">05</span>
-            <div class="panel-media panel-media-system panel-media-lowcode" aria-hidden="true">
-              <div class="flow-node">Power App</div>
-              <div class="flow-line"></div>
-              <div class="flow-node muted">Approval</div>
-              <div class="flow-line"></div>
-              <div class="flow-node">Automate</div>
-            </div>
-            <div class="panel-body">
-              <span class="panel-cat">Low-code · Power Platform</span>
-              <h3 class="panel-title">Power Apps suite</h3>
-              <p class="panel-desc">
-                Super League app and certificate management for the Swisscom CLA team —
-                including automated workflows with Power Automate.
-              </p>
-              <ul class="panel-tags"><li>Power Apps</li><li>Power Automate</li></ul>
             </div>
           </article>
 
@@ -431,7 +405,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script defer src="script.js?v=15"></script>
+  <script defer src="script.js?v=16"></script>
   <script defer src="chat.js?v=11"></script>
 
   <!-- Vercel Analytics (statische Variante, kein npm-Paket noetig) -->

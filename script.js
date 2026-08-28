@@ -312,7 +312,7 @@
     var view = document.querySelector(".shots-view");
     var knoepfe = document.querySelectorAll(".panel-shots");
     var previews = document.querySelectorAll(".panel-media-shot");
-    if (!view || !knoepfe.length) return;
+    if (!view) return;
 
     var bild = view.querySelector(".shots-img");
     var bildunterschrift = view.querySelector(".shots-caption");
@@ -337,13 +337,13 @@
       weiter.disabled = index === bilder.length - 1;
     }
 
-    function oeffne(btn, trigger) {
-      bilder = (btn.dataset.shots || "").split(",").filter(Boolean);
-      texte = (btn.dataset.captions || "").split("|");
+    function oeffne(source, trigger) {
+      bilder = (source.dataset.shots || "").split(",").filter(Boolean);
+      texte = (source.dataset.captions || "").split("|");
       if (!bilder.length) return;
 
       letzterFokus = document.activeElement;
-      titel.textContent = btn.dataset.title || "";
+      titel.textContent = source.dataset.title || "";
       view.classList.toggle("single", bilder.length === 1);
       zeige(0);
 
@@ -378,16 +378,17 @@
 
     previews.forEach(function (preview) {
       var btn = preview.closest(".panel") && preview.closest(".panel").querySelector(".panel-shots");
-      if (!btn) return;
+      var source = btn || preview;
+      if (!source.dataset.shots) return;
       preview.tabIndex = 0;
       preview.setAttribute("role", "button");
       preview.setAttribute("data-hint", document.documentElement.lang === "en" ? "Open image" : "Bild öffnen");
-      preview.setAttribute("aria-label", btn.dataset.title + " öffnen");
-      preview.addEventListener("click", function () { oeffne(btn, preview); });
+      preview.setAttribute("aria-label", source.dataset.title + " öffnen");
+      preview.addEventListener("click", function () { oeffne(source, preview); });
       preview.addEventListener("keydown", function (e) {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          oeffne(btn, preview);
+          oeffne(source, preview);
         }
       });
     });
