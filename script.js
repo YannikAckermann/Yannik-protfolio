@@ -276,7 +276,7 @@
         trigger: ".projects",
         start: "top top",
         end: function () { return "+=" + getDist(); },
-        scrub: 1,
+        scrub: 0.6,
         pin: ".projects-pin",
         pinSpacing: true,
         invalidateOnRefresh: true,
@@ -305,6 +305,84 @@
       p.style.marginBottom = "20px";
     });
   }
+
+  /* ---------- Bildansicht der Projekte ---------- */
+  (function () {
+    var view = document.querySelector(".shots-view");
+    var knoepfe = document.querySelectorAll(".panel-shots");
+    if (!view || !knoepfe.length) return;
+
+    var bild = view.querySelector(".shots-img");
+    var bildunterschrift = view.querySelector(".shots-caption");
+    var titel = view.querySelector(".shots-title");
+    var zaehler = view.querySelector(".shots-count");
+    var zurueck = view.querySelector(".shots-prev");
+    var weiter = view.querySelector(".shots-next");
+    var schliessen = view.querySelector(".shots-close");
+
+    var bilder = [];
+    var texte = [];
+    var index = 0;
+    var letzterFokus = null;
+
+    function zeige(i) {
+      index = Math.max(0, Math.min(bilder.length - 1, i));
+      bild.src = bilder[index];
+      bild.alt = texte[index] || "";
+      bildunterschrift.textContent = texte[index] || "";
+      zaehler.textContent = (index + 1) + " / " + bilder.length;
+      zurueck.disabled = index === 0;
+      weiter.disabled = index === bilder.length - 1;
+    }
+
+    function oeffne(btn) {
+      bilder = (btn.dataset.shots || "").split(",").filter(Boolean);
+      texte = (btn.dataset.captions || "").split("|");
+      if (!bilder.length) return;
+
+      letzterFokus = document.activeElement;
+      titel.textContent = btn.dataset.title || "";
+      view.classList.toggle("single", bilder.length === 1);
+      zeige(0);
+
+      view.hidden = false;
+      // Umbruch erzwingen statt requestAnimationFrame: das laeuft in
+      // Hintergrund-Tabs nicht und die Ansicht bliebe unsichtbar.
+      void view.offsetHeight;
+      view.classList.add("open");
+
+      if (window.__lenis) window.__lenis.stop();
+      document.body.style.overflow = "hidden";
+      setTimeout(function () { schliessen.focus(); }, 250);
+    }
+
+    function schliesse() {
+      view.classList.remove("open");
+      if (window.__lenis) window.__lenis.start();
+      document.body.style.overflow = "";
+      setTimeout(function () { view.hidden = true; }, 350);
+      if (letzterFokus && letzterFokus.focus) letzterFokus.focus();
+    }
+
+    knoepfe.forEach(function (btn) {
+      btn.addEventListener("click", function () { oeffne(btn); });
+    });
+
+    zurueck.addEventListener("click", function () { zeige(index - 1); });
+    weiter.addEventListener("click", function () { zeige(index + 1); });
+    schliessen.addEventListener("click", schliesse);
+
+    view.addEventListener("mousedown", function (e) {
+      if (e.target === view) schliesse();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (view.hidden) return;
+      if (e.key === "Escape") schliesse();
+      else if (e.key === "ArrowLeft") zeige(index - 1);
+      else if (e.key === "ArrowRight") zeige(index + 1);
+    });
+  })();
 
   /* ---------- Contact reveal ---------- */
   var contactChars = document.querySelectorAll(".contact-giant .ch");
