@@ -1388,6 +1388,9 @@ em { font-style: italic; }
 
 /* ---------- Überlagerung ---------- */
 .chat-overlay {
+  /* Breite der Chat-Spalte. Der Roboter rechnet seine Breite daraus aus,
+     damit er nie hinter den Chat rutscht. */
+  --chat-w: 760px;
   position: fixed;
   inset: 0;
   z-index: 130;
@@ -1415,7 +1418,10 @@ em { font-style: italic; }
   position: absolute;
   bottom: 0;
   right: clamp(0px, 1.5vw, 20px);
-  width: min(52vw, 600px);
+  /* Der Chat steht mittig; rechts daneben bleiben (100vw - Chatbreite)/2.
+     Davon noch etwas Abstand abziehen — so ist eine Ueberlappung
+     rechnerisch ausgeschlossen, nicht nur auf breiten Bildschirmen. */
+  width: min(52vw, 600px, calc((100vw - var(--chat-w)) / 2 - 28px));
   height: min(76vh, 550px);
   pointer-events: none;
   opacity: 0;
@@ -1464,7 +1470,7 @@ em { font-style: italic; }
   flex-direction: column;
   justify-content: flex-end;
   width: 100%;
-  max-width: 760px;
+  max-width: var(--chat-w);
   height: 100%;
   gap: 18px;
   position: relative;
@@ -1728,7 +1734,14 @@ em { font-style: italic; }
   color: var(--muted);
 }
 
-@media (max-width: 860px) {
+/* Mittlere Bildschirme: Chat etwas schmaler, damit rechts genug Platz
+   fuer den Roboter bleibt. */
+@media (max-width: 1500px) {
+  .chat-overlay { --chat-w: 620px; }
+}
+
+/* Darunter bliebe vom Roboter nur ein Streifen — dann lieber ganz weg. */
+@media (max-width: 1120px) {
   .chat-robot { display: none; }
 }
 
