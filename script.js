@@ -462,6 +462,77 @@
 
   window.addEventListener("load", function () { ScrollTrigger.refresh(); });
 
+  /* ---------- Kapitelleiste ----------
+     Fortschrittslinie und aktives Kapitel. Die Trigger entstehen hier, also
+     nach dem Pin der Projekte — vorher angelegte Trigger haetten falsche
+     Positionen, weil der Pin-Spacer die Seitenhoehe erst danach veraendert. */
+  (function () {
+    var rail = document.querySelector(".chapter-rail");
+    if (!rail) return;
+    var linie = rail.querySelector(".rail-line i");
+    var eintraege = [].slice.call(rail.querySelectorAll(".rail-item"));
+
+    if (linie) {
+      gsap.to(linie, {
+        scaleY: 1,
+        ease: "none",
+        scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.3 }
+      });
+    }
+
+    // Ein Trigger pro Abschnitt statt einer Schleife bei jedem Scroll-Frame.
+    eintraege.forEach(function (item) {
+      var ziel = document.getElementById(item.dataset.rail);
+      if (!ziel) return;
+      function setzen(aktiv) {
+        if (!aktiv) return;
+        eintraege.forEach(function (e) { e.classList.toggle("on", e === item); });
+      }
+      ScrollTrigger.create({
+        trigger: ziel,
+        start: "top 45%",
+        end: "bottom 45%",
+        onToggle: function (self) { setzen(self.isActive); },
+        onEnter: function () { setzen(true); },
+        onEnterBack: function () { setzen(true); }
+      });
+    });
+  })();
+
+  /* ---------- Variable Schriftstaerke ----------
+     Archivo ist variabel (400–900). Die Ueberschrift laeuft beim Eintreten
+     von leicht nach fett. Bewusst einmalig und nicht am Scrollen gekoppelt:
+     jede Gewichtsaenderung bricht den Text neu um, das waere pro Frame teuer. */
+  document.querySelectorAll("[data-weight]").forEach(function (el) {
+    if (prefersReduced) { el.classList.add("thick"); return; }
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 88%",
+      once: true,
+      onEnter: function () { el.classList.add("thick"); }
+    });
+  });
+
+  /* ---------- Magnetische Schaltflaechen ----------
+     Der Zeiger zieht das Element leicht an. Schreibt nur zwei CSS-Variablen,
+     die in ein transform fliessen — also reines Kompositionieren. */
+  if (!prefersReduced && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    document.querySelectorAll("[data-magnet]").forEach(function (el) {
+      var staerke = 0.32;
+      el.addEventListener("mousemove", function (e) {
+        var r = el.getBoundingClientRect();
+        el.classList.add("pulling");
+        el.style.setProperty("--mx", (e.clientX - (r.left + r.width / 2)) * staerke + "px");
+        el.style.setProperty("--my", (e.clientY - (r.top + r.height / 2)) * staerke + "px");
+      });
+      el.addEventListener("mouseleave", function () {
+        el.classList.remove("pulling");
+        el.style.setProperty("--mx", "0px");
+        el.style.setProperty("--my", "0px");
+      });
+    });
+  }
+
   /* ---------- Eigener Cursor ----------
      Punkt folgt sofort, Ring zieht weich nach. Nur bei echter Maus, und
      nicht bei prefers-reduced-motion. Laeuft auf requestAnimationFrame und

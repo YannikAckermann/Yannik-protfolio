@@ -30,7 +30,7 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
         href="assets/fonts/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu0-K6z9mXg.woff2">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=43">
+  <link rel="stylesheet" href="style.css?v=45">
   <link rel="preload" as="image" href="assets/Yannik-lookingup-1100.webp"
         imagesrcset="assets/Yannik-lookingup-700.webp 467w, assets/Yannik-lookingup-1100.webp 733w, assets/Yannik-lookingup.webp 933w"
         imagesizes="(max-width: 900px) 300px, 440px">
@@ -53,6 +53,17 @@
   <!-- Progress -->
   <div class="progress" aria-hidden="true"><span class="progress-bar"></span></div>
 
+  <nav class="chapter-rail" aria-label="Kapitel">
+    <span class="rail-line" aria-hidden="true"><i></i></span>
+    <div class="rail-items">
+      <a class="rail-item" href="#hero" data-rail="hero"><span class="rail-num">00</span><span class="rail-label">Start</span></a>
+      <a class="rail-item" href="#manifest" data-rail="manifest"><span class="rail-num">01</span><span class="rail-label">Über mich</span></a>
+      <a class="rail-item" href="#projekte" data-rail="projekte"><span class="rail-num">02</span><span class="rail-label">Arbeiten</span></a>
+      <a class="rail-item" href="#erfahrung" data-rail="erfahrung"><span class="rail-num">03</span><span class="rail-label">Werdegang</span></a>
+      <a class="rail-item" href="#kontakt" data-rail="kontakt"><span class="rail-num">04</span><span class="rail-label">Kontakt</span></a>
+    </div>
+  </nav>
+
 
   <!-- Header (Port des MinimalistHero-Headers) -->
   <header class="site-header">
@@ -60,7 +71,7 @@
       <img src="assets/logo.webp" alt="Yannik Ackermann Logo" class="h-logo-img">
     </a>
     <div class="h-actions">
-      <a href="en.html" class="h-lang" data-hover aria-label="Switch to English">EN</a>
+      <a href="en.html" class="h-lang" data-magnet data-hover aria-label="Switch to English">EN</a>
       <button class="h-burger" aria-label="Menü öffnen" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -87,7 +98,7 @@
             Lernender Applikationsentwickler bei Swisscom; Full-Stack,
             AI/ML-Integration und MCP. Leitet Team Halo mit 33 Lernenden.
           </p>
-          <a href="#manifest" class="hero-readmore" data-hover>Mehr erfahren</a>
+          <a href="#manifest" class="hero-readmore" data-magnet data-hover>Mehr erfahren</a>
         </div>
 
         <div class="hero-center">
@@ -102,7 +113,7 @@
         </div>
 
         <div class="hero-right">
-          <h1 class="hero-title">
+          <h1 class="hero-title" data-weight>
             <span>code is</span><br>
             <span class="hero-title-accent">craft.</span>
           </h1>
@@ -139,6 +150,7 @@
 
     <!-- ===== MANIFEST ===== -->
     <section class="manifest" id="manifest">
+      <span class="watermark" aria-hidden="true">01</span>
       <div class="manifest-grid">
         <div class="manifest-copy">
           <span class="section-tag">01 — Über mich</span>
@@ -170,7 +182,7 @@
 
           <article class="panel panel-intro">
             <div class="panel-intro-copy">
-              <h2 class="panel-intro-title">Ausgewählte Arbeiten</h2>
+              <h2 class="panel-intro-title" data-weight>Ausgewählte Arbeiten</h2>
               <p class="panel-intro-sub">
                 Vier Arbeiten aus Ausbildung und Swisscom-Einsätzen — von AI-Interfaces
                 über Plattform-Engineering bis zu automatisierten Prozessen. <em>Scroll weiter →</em>
@@ -278,6 +290,7 @@
 
     <!-- ===== EXPERIENCE ===== -->
     <section class="exp" id="erfahrung">
+      <span class="watermark" aria-hidden="true">03</span>
       <div class="exp-grid">
         <div class="exp-copy">
           <span class="section-tag">03 — Werdegang</span>
@@ -334,6 +347,7 @@
 
     <!-- ===== CONTACT ===== -->
     <section class="contact" id="kontakt">
+      <span class="watermark" aria-hidden="true">04</span>
       <span class="section-tag">04 — Kontakt</span>
       <div class="contact-stage">
         <div class="contact-circle" aria-hidden="true"></div>
@@ -378,7 +392,7 @@
   <!-- ===== Chat ===== -->
   <div class="chat">
     <!-- Auslöser: runder Button unten rechts -->
-    <button class="chat-toggle" aria-expanded="false" aria-label="Chat öffnen">
+    <button class="chat-toggle" data-magnet aria-expanded="false" aria-label="Chat öffnen">
       <span class="chat-toggle-hint" aria-hidden="true">Frag mich über Yannik</span>
       <svg class="icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
     </button>
@@ -416,7 +430,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script defer src="script.js?v=18"></script>
+  <script defer src="script.js?v=19"></script>
   <script defer src="chat.js?v=10"></script>
 
   <!-- Vercel Analytics (statische Variante, kein npm-Paket noetig) -->
