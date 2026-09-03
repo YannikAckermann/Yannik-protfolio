@@ -15,6 +15,10 @@ SHOTS = [
     ("MCP-Gateway-home.png",        "shot-mcp-home.webp"),
     ("MCP-Gateway-gateway_config.png", "shot-mcp-config.webp"),
     ("MCP-Gateay-add-MCP-to-Gateway.png", "shot-mcp-add.webp"),
+    ("Country-pred-Group-results.png",     "shot-cp-gruppen.webp"),
+    ("Country-pred-RO32.png",              "shot-cp-ro32.webp"),
+    ("Country-pred-Finals+Semi.png",       "shot-cp-finale.webp"),
+    ("Country-pred-Switzerand-vs-Argentina.png", "shot-cp-schweiz.webp"),
 ]
 
 for quelle, ziel in SHOTS:

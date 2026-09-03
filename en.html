@@ -30,7 +30,7 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
         href="assets/fonts/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu0-K6z9mXg.woff2">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=35">
+  <link rel="stylesheet" href="style.css?v=36">
   <link rel="preload" as="image" href="assets/Yannik-lookingup-1100.webp"
         imagesrcset="assets/Yannik-lookingup-700.webp 467w, assets/Yannik-lookingup-1100.webp 733w, assets/Yannik-lookingup.webp 933w"
         imagesizes="(max-width: 900px) 300px, 440px">
@@ -245,16 +245,23 @@
 
           <article class="panel">
             <span class="panel-num">04</span>
-            <div class="panel-media panel-media-system panel-media-ml" aria-hidden="true">
-              <div class="metric-card"><strong>72%</strong><span>Model confidence</span></div>
-              <div class="metric-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            </div>
+            <figure class="panel-media panel-media-shot panel-media-stack" data-key="cp"
+                    data-shots="assets/shot-cp-schweiz.webp,assets/shot-cp-gruppen.webp,assets/shot-cp-ro32.webp,assets/shot-cp-finale.webp"
+                    data-captions="Single match prediction: Switzerland vs Argentina — 70.9% for Argentina, with form and past meetings|Simulated group stage with tables and all results|Round of 32 — all 16 matches simulated|Semi-finals and final: Spain beat Italy 3–1 to become world champion"
+                    data-title="Football predictions">
+              <span class="panel-stack-card stack-one" aria-hidden="true"></span>
+              <span class="panel-stack-card stack-two" aria-hidden="true"></span>
+              <img src="assets/shot-cp-finale.webp" loading="lazy" decoding="async" alt="Simulated semi-finals and final, Spain becoming world champion 2026">
+            </figure>
             <div class="panel-body">
               <span class="panel-cat">Machine learning</span>
               <h3 class="panel-title">Football predictions</h3>
               <p class="panel-desc">
-                ML model for predicting match results — from data preparation
-                to the trained model. As a goalkeeper I know: predictions are hard.
+                ML model for predicting match results — from data preparation to the
+                trained model. It rates individual matches by probability and simulates
+                the whole 2026 World Cup: the winner comes out as <strong>Spain</strong>.
+                When the project was built the play-offs had not been decided yet — which
+                is why Italy runs through the bracket even though it did not qualify.
               </p>
               <ul class="panel-tags"><li>Python</li><li>Machine Learning</li></ul>
               <a class="panel-link" href="https://github.com/YannikAckermann/Country-prediction" target="_blank" rel="noopener" data-hover>
@@ -405,7 +412,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script defer src="script.js?v=15"></script>
+  <script defer src="script.js?v=16"></script>
   <script defer src="chat.js?v=10"></script>
 
   <!-- Vercel Analytics (statische Variante, kein npm-Paket noetig) -->

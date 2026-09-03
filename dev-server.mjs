@@ -14,7 +14,7 @@ import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL(".", import.meta.url));
-const PORT = Number(process.env.PORT) || 8123;
+const PORT = Number(process.env.PORT) || 8124;
 
 /* ---------- .env laden (ohne Zusatzpaket) ---------- */
 try {
