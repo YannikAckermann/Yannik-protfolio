@@ -125,7 +125,12 @@
   }
 
   function openLink(url) {
-    return function () { window.open(url, "_blank", "noopener"); };
+    return function () {
+      // mailto nicht ueber window.open: das hinterlaesst je nach Browser
+      // einen leeren Tab, wenn das Mailprogramm uebernimmt.
+      if (url.indexOf("mailto:") === 0) window.location.href = url;
+      else window.open(url, "_blank", "noopener");
+    };
   }
 
   var ACTIONS = {
