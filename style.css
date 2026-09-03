@@ -2024,11 +2024,38 @@ body.cursor-dark .cursor-ring { border-color: var(--paper); }
 
 .manifest, .exp, .contact { position: relative; overflow-x: clip; }
 
-/* Die Ziffer selbst ausnehmen — sonst ueberschreibt diese Regel ihr
-   position: absolute (gleiche Spezifitaet, spaeter im Stylesheet) und die
-   Ziffer landet mitten im Textfluss statt am Rand. */
-.manifest > *:not(.watermark),
-.exp > *:not(.watermark),
-.contact > *:not(.watermark) { position: relative; z-index: 1; }
+/* Ziffer und ASCII-Zeichnung ausnehmen — sonst ueberschreibt diese Regel ihr
+   position: absolute (gleiche Spezifitaet, spaeter im Stylesheet) und sie
+   landen mitten im Textfluss statt am Rand. */
+.manifest > *:not(.watermark):not(.ascii-art),
+.exp > *:not(.watermark):not(.ascii-art),
+.contact > *:not(.watermark):not(.ascii-art) { position: relative; z-index: 1; }
 
 @media (max-width: 900px) { .watermark { display: none; } }
+
+/* ---------- ASCII-Portrait ----------
+   Im dunklen Werdegang-Abschnitt: helle Zeichen auf Tinte lesen sich wie
+   Terminal-Ausgabe und passen zum "code is craft" der Startseite. Es ist
+   echter Text, kein Bild — knapp 2 KB, bei jeder Zoomstufe scharf.
+   Die Kapitelziffer 03 weicht dafuer, beides waere zu viel. */
+.ascii-art {
+  position: absolute;
+  right: clamp(-10px, 1vw, 30px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 0;
+  margin: 0;
+  font-family: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+  /* Am Zeichenraster ausgerichtet: die Breite ergibt sich aus 86 Zeichen. */
+  font-size: clamp(4px, 0.52vw, 8px);
+  line-height: 1.06;
+  letter-spacing: 0.02em;
+  white-space: pre;
+  color: rgba(243, 240, 234, 0.3);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Unter 1200px nimmt der Text die ganze Breite ein — dann waere die
+   Zeichnung nur noch Stoerung hinter den Zeilen. */
+@media (max-width: 1200px) { .ascii-art { display: none; } }
