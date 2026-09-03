@@ -448,4 +448,74 @@
   }
 
   window.addEventListener("load", function () { ScrollTrigger.refresh(); });
+
+  /* ---------- Eigener Cursor ----------
+     Punkt folgt sofort, Ring zieht weich nach. Nur bei echter Maus, und
+     nicht bei prefers-reduced-motion. Laeuft auf requestAnimationFrame und
+     schreibt nur transform — also reines Kompositionieren, kein Umbruch. */
+  (function () {
+    var dot = document.querySelector(".cursor-dot");
+    var ring = document.querySelector(".cursor-ring");
+    if (!dot || !ring || prefersReduced) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    var zielX = 0, zielY = 0, ringX = 0, ringY = 0, sichtbar = false;
+
+    window.addEventListener("mousemove", function (e) {
+      zielX = e.clientX;
+      zielY = e.clientY;
+      if (!sichtbar) {
+        sichtbar = true;
+        ringX = zielX; ringY = zielY;
+        document.body.classList.add("cursor-on");
+      }
+      // Auf dunklem Grund umdrehen, sonst verschwindet der Zeiger
+      var dunkel = e.target.closest && e.target.closest(".exp, .marquee, .statement");
+      document.body.classList.toggle("cursor-dark", !!dunkel);
+    }, { passive: true });
+
+    document.addEventListener("mouseleave", function () {
+      sichtbar = false;
+      document.body.classList.remove("cursor-on");
+    });
+
+    function folge() {
+      dot.style.transform = "translate3d(" + zielX + "px," + zielY + "px,0)";
+      ringX += (zielX - ringX) * 0.18;
+      ringY += (zielY - ringY) * 0.18;
+      ring.style.transform = "translate3d(" + ringX + "px," + ringY + "px,0)";
+      requestAnimationFrame(folge);
+    }
+    requestAnimationFrame(folge);
+
+    // Zustaende ueber Ereignis-Delegation: gilt auch fuer spaeter eingefuegte
+    // Knoepfe, etwa die Handlungsknoepfe im Chat.
+    document.addEventListener("mouseover", function (e) {
+      var t = e.target;
+      if (!t.closest) return;
+      var medium = t.closest(".panel-media-shot");
+      var link = t.closest("a, button, [data-hover], .chat-action, .chat-chip");
+      document.body.classList.toggle("cursor-media", !!medium);
+      document.body.classList.toggle("cursor-link", !medium && !!link);
+    }, { passive: true });
+  })();
+
+  /* ---------- Vorhang beim Sprachwechsel ----------
+     Der Wechsel DE/EN war ein harter Seitensprung. Jetzt faehrt erst ein
+     Vorhang hoch, dann wird geladen — die neue Seite startet ohnehin mit
+     dem Preloader, der Uebergang bleibt also durchgehend dunkel bzw. ruhig. */
+  (function () {
+    var curtain = document.querySelector(".curtain");
+    var lang = document.querySelector(".h-lang");
+    if (!curtain || !lang) return;
+
+    lang.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;  // neuer Tab
+      e.preventDefault();
+      var ziel = lang.getAttribute("href");
+      if (prefersReduced) { window.location.href = ziel; return; }
+      curtain.classList.add("up");
+      setTimeout(function () { window.location.href = ziel; }, 560);
+    });
+  })();
 })();

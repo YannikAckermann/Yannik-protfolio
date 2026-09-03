@@ -1016,9 +1016,25 @@ em { font-style: italic; }
 }
 
 /* ---------- Experience ---------- */
+/* ---------- 03 Werdegang: dunkles Kapitel ----------
+   Die Seite war durchgehend hell ausser dem Marquee. Ein Abschnitt in Tinte
+   gibt dem Scrollen einen Rhythmus und hebt den Werdegang heraus. Die Farben
+   drehen sich hier um, deshalb setzt der Block alle Textfarben neu. */
 .exp {
   padding: clamp(100px, 15vh, 190px) var(--pad);
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  z-index: 1;                    /* ueber dem Hairline-Raster */
 }
+
+.exp .section-tag { color: var(--paper); }
+.exp-item { border-top-color: rgba(243, 240, 234, 0.18); }
+.exp-item:last-child { border-bottom-color: rgba(243, 240, 234, 0.18); }
+.exp-year { -webkit-text-stroke-color: var(--accent); }
+.exp-title { color: var(--paper); }
+.exp .exp-desc { color: rgba(243, 240, 234, 0.68); }
+.exp .exp-desc strong { color: var(--paper); }
 
 .exp-grid {
   display: grid;
@@ -1820,4 +1836,186 @@ em { font-style: italic; }
   .chat-placeholder .ch { animation: none; opacity: 1; filter: none; transform: none; }
   .chat-msg { animation: none; }
   * { transition-duration: 0.01ms !important; }
+}
+
+/* ============================================
+   Optische Aufwertung — Raster, Cursor, Vorhang
+   ============================================ */
+
+/* ---------- 5 · Hairline-Raster ----------
+   Feines Liniengeruest ueber die ganze Seite. Liegt fix hinter allem und
+   scrollt nicht mit, ist also eine einzige Kompositionsebene und kostet beim
+   Scrollen nichts. Dunkle Abschnitte holen sich mit .exp z-index: 1 den
+   Vordergrund, damit die Linien dort nicht durchscheinen. */
+.hairlines {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--line) 0 1px,
+    transparent 1px calc(100% / 6)
+  );
+  opacity: 0.45;
+}
+
+@media (max-width: 900px) { .hairlines { display: none; } }
+
+/* ---------- 2 · Eigener Cursor ----------
+   Nur fuer echte Mauszeiger — auf Touch bleibt alles wie gehabt. Der Punkt
+   folgt sofort, der Ring zieht weich nach; ueber Links wird er gross. */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.25s;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--ink);
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid var(--ink);
+  transition: opacity 0.25s, width 0.28s, height 0.28s, margin 0.28s,
+              background-color 0.28s, border-color 0.28s;
+}
+
+body.cursor-on .cursor-dot,
+body.cursor-on .cursor-ring { opacity: 1; }
+
+/* Ueber Links: Ring waechst, Punkt verschwindet */
+body.cursor-link .cursor-dot { opacity: 0; }
+body.cursor-link .cursor-ring {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Ueber einem Projektbild: Ring wird zur Schaltflaeche mit Beschriftung */
+.cursor-ring span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-head);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+body.cursor-media .cursor-dot { opacity: 0; }
+body.cursor-media .cursor-ring {
+  width: 92px;
+  height: 92px;
+  margin: -46px 0 0 -46px;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+body.cursor-media .cursor-ring span { opacity: 1; }
+
+/* Auf dunklem Grund umdrehen, sonst verschwindet der Zeiger */
+body.cursor-dark .cursor-dot { background: var(--paper); }
+body.cursor-dark .cursor-ring { border-color: var(--paper); }
+
+/* Systemzeiger nur ausblenden, wenn der eigene wirklich laeuft */
+@media (hover: hover) and (pointer: fine) {
+  body.cursor-on,
+  body.cursor-on a,
+  body.cursor-on button,
+  body.cursor-on [data-hover] { cursor: none; }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+/* ---------- 3 · Vorhang beim Sprachwechsel ---------- */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: var(--ink);
+  transform: translateY(100%);
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+
+.curtain.up {
+  transform: translateY(0);
+  transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.curtain-word {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: clamp(3rem, 12vw, 9rem);
+  letter-spacing: -0.03em;
+  color: var(--paper);
+  opacity: 0;
+  transition: opacity 0.3s 0.2s;
+}
+
+.curtain.up .curtain-word { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain, .curtain.up { transition: none; }
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+/* ---------- 4 · Typografie-Moment ----------
+   "SAG HALLO" wird zum Schlusspunkt der Seite: deutlich groesser und bewusst
+   ueber den rechten Rand hinaus. Das Wort wird angeschnitten wie im Print,
+   statt brav in der Spalte zu stehen. overflow-x am body faengt das ab. */
+.contact-stage {
+  width: auto;
+  max-width: none;
+}
+
+/* Der ueberstehende Text muss hier abgeschnitten werden. overflow-x am body
+   allein reicht nicht — das <html> waechst trotzdem mit und es entsteht ein
+   waagrechter Scrollbalken. clip statt hidden, damit kein Scroll-Container
+   entsteht, der Sticky- und Pin-Verhalten stoeren wuerde. */
+.contact { overflow-x: clip; }
+
+.contact-giant {
+  font-size: clamp(3.4rem, 26vw, 30rem);
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+/* Die zweite Zeile ist eingerueckt und laeuft rechts aus dem Bild. Der Pfeil
+   sitzt bewusst auf der ersten, kurzen Zeile — wuerde er angeschnitten,
+   sähe es nach Fehler aus statt nach Absicht. */
+.contact-giant-line:last-child {
+  display: block;
+  margin-left: clamp(0px, 18vw, 380px);
+}
+
+.contact-giant:hover { letter-spacing: -0.02em; }
+
+/* Unter 900px bleibt alles im Rahmen — angeschnitten wirkt dort nur eng. */
+@media (max-width: 900px) {
+  .contact-giant { font-size: clamp(2.6rem, 13vw, 4rem); white-space: normal; }
+  .contact-giant-line:last-child { margin-left: 0; }
 }
