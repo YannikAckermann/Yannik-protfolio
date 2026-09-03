@@ -2,6 +2,12 @@
 """
 Bereitet die Projekt-Screenshots fuer die Website auf: auf Web-Groesse
 bringen und als WebP speichern. Die Originale bleiben unangetastet.
+
+Hinweis: die PNG-Originale liegen nicht mehr im Repo — sie waren nur
+Zwischenschritt und haben 1.5 MB belegt. Wer die WebP neu bauen will,
+legt das PNG wieder unter assets/ ab; fehlende Dateien werden hier
+uebersprungen. Aus der Git-Historie zurueckholen:
+    git checkout cc53843 -- assets/<datei>.png
 """
 from pathlib import Path
 from PIL import Image
