@@ -445,14 +445,37 @@
   }
 
   /* ---------- Öffnen / Schliessen ---------- */
+  /* Der Spline-Viewer haelt eine eigene Renderschleife und zeichnet weiter,
+     solange er im Renderbaum haengt — auch bei visibility: hidden. Deshalb
+     wird er beim Schliessen ausdruecklich angehalten. play/stop sind interne
+     Felder des fest verdrahteten Viewers (1.9.82), darum abgesichert. */
+  function roboterLauf(an) {
+    var viewer = robot && robot.querySelector("spline-viewer");
+    var app = viewer && viewer._spline;
+    if (!app || typeof app.play !== "function" || typeof app.stop !== "function") return;
+    try {
+      if (an) app.play();
+      else app.stop();
+    } catch (e) { /* andere Viewer-Version — dann greift nur display: none */ }
+  }
+
+  var idleTimer = null;
+  root.classList.add("idle");
+
   function open() {
     lastFocus = document.activeElement;
+    clearTimeout(idleTimer);
+    // Erst zurueck in den Renderbaum, dann einblenden: sonst gibt es keinen
+    // Uebergang und der Roboter wuerde mit Groesse 0 aufgebaut.
+    root.classList.remove("idle");
+    void overlay.offsetHeight;
     root.classList.add("open");
     toggle.setAttribute("aria-expanded", "true");
     // Seite hinter der Überlagerung ruhigstellen
     if (window.__lenis) window.__lenis.stop();
     document.body.style.overflow = "hidden";
     loadRobot();
+    roboterLauf(true);
     bootstrap();
     updatePlaceholderVisibility();
     setTimeout(function () { input.focus(); }, 420);
@@ -466,6 +489,11 @@
     if (window.__lenis) window.__lenis.start();
     document.body.style.overflow = "";
     stopPlaceholders();
+    roboterLauf(false);
+    // Erst nach der Ausblende (Overlay 0.4s, Roboter 0.15s + 0.6s) aushaengen,
+    // sonst verschwindet der Chat schlagartig statt weich.
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function () { root.classList.add("idle"); }, 800);
     if (opts && opts.keepFocus) return;
     if (lastFocus && lastFocus.focus) lastFocus.focus();
     else toggle.focus();

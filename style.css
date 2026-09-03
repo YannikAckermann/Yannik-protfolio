@@ -1416,6 +1416,12 @@ em { font-style: italic; }
 
 .chat.open .chat-overlay { opacity: 1; visibility: visible; }
 
+/* Im Ruhezustand ganz aus dem Rendering nehmen. visibility: hidden allein
+   reicht nicht: die Backdrop-Filter-Ebene bleibt bestehen und die WebGL-Szene
+   des Roboters gilt weiter als sichtbar und rendert endlos weiter — danach
+   ruckelt die ganze Seite. Wird per JS erst nach der Ausblende gesetzt. */
+.chat.idle .chat-overlay { display: none; }
+
 /* ---------- 3D-Roboter ----------
    Der Roboter steht rechts neben dem Chat und folgt dem Cursor. Er faengt keine
    Klicks ab (pointer-events:none) — die Cursor-Position wird per JS an die
