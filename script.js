@@ -148,7 +148,20 @@
   var preloader = document.querySelector(".preloader");
   var countEl = document.querySelector(".preloader-count");
 
-  if (preloader && countEl && !prefersReduced) {
+  // Beim Sprachwechsel kommt man schon durch den Vorhang — dann noch die
+  // Ladeanimation mit dem Logo zu zeigen, waere doppelt. Die Marke setzt der
+  // Vorhang kurz vor dem Wechsel, hier wird sie gelesen und gleich geloescht,
+  // damit ein normaler Neuaufbau die Animation wieder bekommt.
+  var vomSprachwechsel = false;
+  try {
+    vomSprachwechsel = sessionStorage.getItem("sprachwechsel") === "1";
+    if (vomSprachwechsel) sessionStorage.removeItem("sprachwechsel");
+  } catch (e) { /* sessionStorage gesperrt — dann laeuft die Animation eben */ }
+
+  if (preloader && vomSprachwechsel) {
+    preloader.style.display = "none";
+    if (!prefersReduced) heroIn();
+  } else if (preloader && countEl && !prefersReduced) {
     gsap.set([heroEls.logo, heroEls.burger, heroEls.circle, heroEls.img, heroEls.left, heroEls.right], { opacity: 0 });
     gsap.set(heroEls.footer, { opacity: 0 });
     var preLogo = preloader.querySelector(".preloader-logo");
@@ -513,6 +526,9 @@
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;  // neuer Tab
       e.preventDefault();
       var ziel = lang.getAttribute("href");
+      // Merken, dass der Wechsel ueber den Vorhang lief: die Zielseite
+      // ueberspringt dann ihre Ladeanimation.
+      try { sessionStorage.setItem("sprachwechsel", "1"); } catch (e) {}
       if (prefersReduced) { window.location.href = ziel; return; }
       curtain.classList.add("up");
       setTimeout(function () { window.location.href = ziel; }, 560);
