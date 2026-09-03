@@ -30,16 +30,20 @@ const registry = [...registryBlock[1].matchAll(/^\s{4}(\w+):\s*\{/gm)].map((m) =
 /* Kennungen aus den beiden Systemprompts: eingerueckte "kennung — Beschreibung" */
 const profileSrc = lies("api", "profile.js");
 
-function idsAusPrompt(startMarker) {
-  const ab = profileSrc.indexOf(startMarker);
+/* Blockgrenzen an den Ueberschriften festmachen, nicht an einzelnen Prosa-
+   Zeilen: die werden beim Umformulieren des Prompts sonst still ungueltig,
+   der Block laeuft in den naechsten hinein und die Pruefung wird wertlos. */
+function idsAusPrompt(vonMarker, bisMarker) {
+  const ab = profileSrc.indexOf(vonMarker);
   if (ab === -1) return null;
-  const bis = profileSrc.indexOf("\n- Erwähne", ab) + 1 || profileSrc.indexOf("\n- Never mention", ab) + 1;
-  const block = profileSrc.slice(ab, bis > 0 ? bis : undefined);
+  const bis = profileSrc.indexOf(bisMarker, ab);
+  if (bis === -1) return null;
+  const block = profileSrc.slice(ab, bis);
   return [...block.matchAll(/^\s{2}([a-z_]+)\s+—/gm)].map((m) => m[1]);
 }
 
-const promptDE = idsAusPrompt("HANDLUNGEN:");
-const promptEN = idsAusPrompt("ACTIONS:\nThe website");
+const promptDE = idsAusPrompt("HANDLUNGEN:", "\nFAKTEN:");
+const promptEN = idsAusPrompt("ACTIONS:", "\nFACTS:");
 
 let fehler = 0;
 

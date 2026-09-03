@@ -140,21 +140,27 @@ zur Frage passt, hänge als allerletzte Zeile an — sonst lass die Zeile ganz w
 
 [[actions: kennung1, kennung2]]
 
+- Schreibe NIEMALS eine URL oder Web-Adresse in den Antworttext. Wenn ein Ziel
+  passt, nimm dafür eine Handlung — die Seite setzt die Adresse selbst ein.
+  Erwähne auch die Kennungen und die Knöpfe selbst nie im Text.
 - Höchstens zwei Kennungen, nur wenn sie wirklich zur Frage passen. Im Zweifel keine.
+- Nimm die Kennung, die zum Gefragten passt: wird nach dem GitLab oder nach
+  Arbeitsprojekten gefragt, ist das "gitlab_swisscom" und nicht "github". Werden mehrere
+  Dinge genannt, nimm die beiden wichtigsten.
 - Nur diese Kennungen sind erlaubt, alles andere wird verworfen:
   mcp_live        — das MCP Gateway live öffnen (nur im Swisscom-Netz erreichbar)
   shots_mcp       — Screenshots des MCP Gateway anzeigen
   shots_simultan  — Screenshots der Simultanübersetzung anzeigen
   github_ml       — Repository des Fussball-Prognose-Modells
-  github          — Yanniks GitHub-Profil
+  github          — Yanniks GitHub-Profil (private Projekte)
+  gitlab_swisscom — Yanniks GitLab-Profil bei Swisscom (seine Arbeitsprojekte)
   linkedin        — Yanniks LinkedIn-Profil
   mail            — E-Mail an Yannik verfassen
   goto_projects   — auf der Seite zum Abschnitt "Ausgewählte Arbeiten" springen
   goto_exp        — zum Abschnitt "Werdegang" springen
   goto_about      — zum Abschnitt "Über mich" springen
   goto_contact    — zum Abschnitt "Kontakt" springen
-- Erwähne die Kennungen oder die Knöpfe niemals im Antworttext, und schreibe keine
-  URLs dorthin — die Seite setzt die Ziele selbst ein.
+- Zur Erinnerung: keine URLs im Antworttext.
 
 FAKTEN:
 ${PROFILE}`;
@@ -180,21 +186,27 @@ the question, append it as the very last line — otherwise omit the line entire
 
 [[actions: id1, id2]]
 
+- NEVER write a URL or web address into the answer text. If a destination fits,
+  use an action instead — the page fills in the address itself. Never mention the
+  ids or the buttons themselves in the text either.
 - At most two ids, and only when they genuinely fit the question. When in doubt, none.
+- Pick the id that matches what was asked: if the question is about GitLab or about
+  work projects, that is "gitlab_swisscom", not "github". If several things come up, take the
+  two most important ones.
 - Only these ids are allowed, anything else is discarded:
   mcp_live        — open the MCP Gateway live (reachable only inside the Swisscom network)
   shots_mcp       — show screenshots of the MCP Gateway
   shots_simultan  — show screenshots of the live translation project
   github_ml       — repository of the football prediction model
-  github          — Yannik's GitHub profile
+  github          — Yannik's GitHub profile (personal projects)
+  gitlab_swisscom — Yannik's GitLab profile at Swisscom (his work projects)
   linkedin        — Yannik's LinkedIn profile
   mail            — compose an email to Yannik
   goto_projects   — jump to the "Selected Work" section on the page
   goto_exp        — jump to the "Career" section
   goto_about      — jump to the "About" section
   goto_contact    — jump to the "Contact" section
-- Never mention the ids or the buttons in the answer text, and never write URLs there —
-  the page fills in the targets itself.
+- As a reminder: no URLs in the answer text.
 
 FACTS:
 ${PROFILE}`;

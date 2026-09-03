@@ -151,6 +151,14 @@
       en: "GitHub profile",
       run: openLink("https://github.com/YannikAckermann")
     },
+    gitlab_swisscom: {
+      de: "GitLab-Profil",
+      en: "GitLab profile",
+      // Von aussen erreichbar, leitet aber auf die Anmeldung um.
+      note_de: "Swisscom-Login nötig",
+      note_en: "Swisscom login required",
+      run: openLink("https://code.swisscom.com/Yannik.Ackermann")
+    },
     linkedin: {
       de: "LinkedIn-Profil",
       en: "LinkedIn profile",
