@@ -14,8 +14,12 @@ import { dirname, join } from "node:path";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
+/* Git schreibt die Dateien unter Windows mit CRLF aus — die Zeilenenden hier
+   vereinheitlichen, sonst greifen die Marker mit "\n" darin nicht mehr. */
+const lies = (...p) => readFileSync(join(root, ...p), "utf8").replace(/\r\n/g, "\n");
+
 /* Registry aus chat.js: der Block zwischen "var ACTIONS = {" und der Zeile "};" */
-const chatSrc = readFileSync(join(root, "chat.js"), "utf8");
+const chatSrc = lies("chat.js");
 const registryBlock = chatSrc.match(/var ACTIONS = \{([\s\S]*?)\n  \};/);
 if (!registryBlock) {
   console.error("FEHLER: ACTIONS-Registry in chat.js nicht gefunden.");
@@ -24,7 +28,7 @@ if (!registryBlock) {
 const registry = [...registryBlock[1].matchAll(/^\s{4}(\w+):\s*\{/gm)].map((m) => m[1]);
 
 /* Kennungen aus den beiden Systemprompts: eingerueckte "kennung — Beschreibung" */
-const profileSrc = readFileSync(join(root, "api", "profile.js"), "utf8");
+const profileSrc = lies("api", "profile.js");
 
 function idsAusPrompt(startMarker) {
   const ab = profileSrc.indexOf(startMarker);

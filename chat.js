@@ -229,23 +229,59 @@
      Nur der Roboter (Spline-Szene) — kein Card/Spotlight-Rahmen. Der schwere
      Spline-Runtime wird erst beim ersten Oeffnen des Chats geladen, damit der
      Seitenaufbau nicht ausgebremst wird. Auf dem Handy bleibt er ganz aus. */
+  var RUNTIME = "https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js";
+  var SZENE = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
+
+  // Unter 1120px blendet das CSS den Roboter aus — dann auch nichts laden.
+  // (Die Grenze stand hier frueher auf 860px, dazwischen wurden 3.5 MB fuer
+  // etwas geholt, das gar nicht sichtbar ist.)
+  function robotSichtbar() {
+    return !!robot && window.matchMedia("(min-width: 1121px)").matches;
+  }
+
+  function ladeRuntime() {
+    if (document.querySelector("script[data-spline-viewer]")) return;
+    var s = document.createElement("script");
+    s.type = "module";
+    s.src = RUNTIME;
+    s.setAttribute("data-spline-viewer", "");
+    document.head.appendChild(s);
+  }
+
+  /* Runtime und Szene schon im Hintergrund holen, damit der Roboter beim
+     Oeffnen des Chats sofort da ist. Zusammen sind das 3.5 MB — deshalb erst,
+     wenn die Seite fertig geladen ist und der Hauptthread Leerlauf hat, und
+     nicht bei gedrosselter Verbindung oder aktivem Datensparmodus. */
+  function warmRobot() {
+    if (!robotSichtbar()) return;
+    var netz = navigator.connection;
+    if (netz && (netz.saveData || /2g/.test(netz.effectiveType || ""))) return;
+
+    var gestartet = false;
+    var los = function () {
+      if (gestartet) return;
+      gestartet = true;
+      ladeRuntime();
+      fetch(SZENE, { mode: "cors", cache: "force-cache" }).catch(function () {});
+    };
+    // Bevorzugt im Leerlauf — aber mit Zeitgeber daneben: in Hintergrund-Tabs
+    // wird requestIdleCallback gedrosselt und feuert unter Umstaenden gar nicht.
+    if (window.requestIdleCallback) requestIdleCallback(los, { timeout: 3000 });
+    setTimeout(los, 3000);
+  }
+
+  if (document.readyState === "complete") warmRobot();
+  else window.addEventListener("load", warmRobot, { once: true });
+
   function loadRobot() {
-    if (robotLoaded || !robot) return;
-    if (window.matchMedia("(max-width: 860px)").matches) return;
+    if (robotLoaded || !robotSichtbar()) return;
     robotLoaded = true;
 
     var viewer = document.createElement("spline-viewer");
-    viewer.setAttribute("url", "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode");
+    viewer.setAttribute("url", SZENE);
     viewer.setAttribute("loading-anim-type", "none");
     robot.appendChild(viewer);
-
-    if (!document.querySelector('script[data-spline-viewer]')) {
-      var s = document.createElement("script");
-      s.type = "module";
-      s.src = "https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js";
-      s.setAttribute("data-spline-viewer", "");
-      document.head.appendChild(s);
-    }
+    ladeRuntime();
 
     // Spline-Wasserzeichen im Shadow-DOM ausblenden, sobald es existiert.
     var tries = 0;

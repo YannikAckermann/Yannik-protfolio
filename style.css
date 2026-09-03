@@ -102,10 +102,11 @@ em { font-style: italic; }
   transition: background-color 0.35s, padding 0.35s, box-shadow 0.35s;
 }
 
+/* Bewusst ohne backdrop-filter: der Kopf steht fix ueber der ganzen Breite,
+   ein Blur dort muesste bei jedem Scroll-Frame neu gerechnet werden. Fast
+   deckend sieht praktisch gleich aus und kostet nichts. */
 .site-header.scrolled {
-  background: rgba(243, 240, 234, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(243, 240, 234, 0.97);
   padding-top: 14px;
   padding-bottom: 14px;
   box-shadow: 0 1px 0 var(--line);
@@ -459,7 +460,13 @@ em { font-style: italic; }
   position: relative;
   overflow: hidden;
   box-shadow: 0 24px 60px rgba(22, 21, 19, 0.08);
-  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+  /* box-shadow bewusst nicht mit animiert: die Panels gleiten beim Scrollen
+     unter dem stehenden Mauszeiger durch, jedes loest dabei :hover aus. Ein
+     Schatten mit 72px Weichzeichnung laesst sich nicht komponieren und muss
+     das ganze 1040x620-Panel neu zeichnen — genau dort ruckelte es. */
+  transition: transform 0.3s, border-color 0.3s;
+  /* Haelt Umbruch und Neuzeichnen innerhalb des Panels. */
+  contain: layout paint;
 }
 
 .panel::before {
@@ -474,9 +481,9 @@ em { font-style: italic; }
   pointer-events: none;
 }
 
+/* Nur transform (wird komponiert) und die Randfarbe — der Schatten bleibt. */
 .panel:hover {
   border-color: rgba(22, 21, 19, 0.34);
-  box-shadow: 0 28px 72px rgba(22, 21, 19, 0.12);
   transform: translateY(-4px);
 }
 

@@ -18,10 +18,12 @@ export const PROFILE = `
 - GitHub: https://github.com/YannikAckermann
 - Sprachen: Deutsch (Muttersprache), Englisch (gut — BMS-Englisch mit Vornote 5.5
   abgeschlossen; seine Lehrerin hat ihm empfohlen, ein Sprachzertifikat zu machen)
-- Freizeit: Torhüter beim FC Sarmenstorf
+- Freizeit: kein Torhüter mehr beim FC Sarmenstorf, weil Sehne in der Hand gerissen. Gamed gerne oder versucht eigene Projekte zu bauen Zuhause. Wie zbs. ein Discord Bot, der Musik abspielen kann. 
+- Gehosted wurde das auf einem Altem PC, der zu einem Server umegabut wurde und mit LXC Instance läuft. Er verbringt auch gerne Zeit, mit Kollegen oder seiner Freundin.
 
 ## Verfügbarkeit und Zeitplan
 - Lehrabschluss: 31.07.2028. Bis dahin steht er für Projekteinsätze zur Verfügung.
+- Er sucht ein Projekt für die IPA, also die Abschlussarbeit die im 4. Lehrjahr gemacht wird. Das Projekt sollte idealerweise im Bereich Cybersecurity sein oder Richtung AI.
 - Der aktuelle Einsatz (Team Halo) läuft bis Ende Januar 2027 — ab dem 01.02.2027
   ist er für einen neuen Einsatz frei.
 - Anwesenheit heute: ein Schultag pro Woche (Montag, Berufsmaturitätsschule),
