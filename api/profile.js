@@ -132,6 +132,28 @@ REGELN:
   Schlüsselbegriffe, Aufzählungen mit "-", nummerierte Listen. Keine Überschriften,
   keine Tabellen, keine Codeblöcke.
 
+HANDLUNGEN:
+Die Website kann dem Besucher unter deiner Antwort Knöpfe anzeigen. Wenn eine davon
+zur Frage passt, hänge als allerletzte Zeile an — sonst lass die Zeile ganz weg:
+
+[[actions: kennung1, kennung2]]
+
+- Höchstens zwei Kennungen, nur wenn sie wirklich zur Frage passen. Im Zweifel keine.
+- Nur diese Kennungen sind erlaubt, alles andere wird verworfen:
+  mcp_live        — das MCP Gateway live öffnen (nur im Swisscom-Netz erreichbar)
+  shots_mcp       — Screenshots des MCP Gateway anzeigen
+  shots_simultan  — Screenshots der Simultanübersetzung anzeigen
+  github_ml       — Repository des Fussball-Prognose-Modells
+  github          — Yanniks GitHub-Profil
+  linkedin        — Yanniks LinkedIn-Profil
+  mail            — E-Mail an Yannik verfassen
+  goto_projects   — auf der Seite zum Abschnitt "Ausgewählte Arbeiten" springen
+  goto_exp        — zum Abschnitt "Werdegang" springen
+  goto_about      — zum Abschnitt "Über mich" springen
+  goto_contact    — zum Abschnitt "Kontakt" springen
+- Erwähne die Kennungen oder die Knöpfe niemals im Antworttext, und schreibe keine
+  URLs dorthin — die Seite setzt die Ziele selbst ein.
+
 FAKTEN:
 ${PROFILE}`;
 
@@ -149,6 +171,28 @@ RULES:
 - Refer to Yannik in the third person.
 - Use light markdown where it makes the answer easier to read: **bold** for key terms,
   "-" bullet lists, numbered lists. No headings, no tables, no code blocks.
+
+ACTIONS:
+The website can show the visitor buttons underneath your answer. If one of them fits
+the question, append it as the very last line — otherwise omit the line entirely:
+
+[[actions: id1, id2]]
+
+- At most two ids, and only when they genuinely fit the question. When in doubt, none.
+- Only these ids are allowed, anything else is discarded:
+  mcp_live        — open the MCP Gateway live (reachable only inside the Swisscom network)
+  shots_mcp       — show screenshots of the MCP Gateway
+  shots_simultan  — show screenshots of the live translation project
+  github_ml       — repository of the football prediction model
+  github          — Yannik's GitHub profile
+  linkedin        — Yannik's LinkedIn profile
+  mail            — compose an email to Yannik
+  goto_projects   — jump to the "Selected Work" section on the page
+  goto_exp        — jump to the "Career" section
+  goto_about      — jump to the "About" section
+  goto_contact    — jump to the "Contact" section
+- Never mention the ids or the buttons in the answer text, and never write URLs there —
+  the page fills in the targets itself.
 
 FACTS:
 ${PROFILE}`;

@@ -1634,6 +1634,61 @@ em { font-style: italic; }
   transform: translateY(-2px);
 }
 
+/* ---------- Handlungen unter einer Antwort ---------- */
+.chat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.chat-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-head);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: left;
+  padding: 9px 15px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.22s, background-color 0.22s, transform 0.22s;
+}
+
+.chat-action:hover {
+  border-color: var(--ink);
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+.chat-action svg { flex-shrink: 0; transition: transform 0.22s; }
+.chat-action:hover svg { transform: translateX(3px); }
+
+/* Zusatz wie "nur im Swisscom-Netz" unter der Beschriftung */
+.chat-action-label { display: block; line-height: 1.35; }
+
+.chat-action-label small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.chat-action:hover .chat-action-label small { color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-action, .chat-action svg { transition: none; }
+  .chat-action:hover { transform: none; }
+  .chat-action:hover svg { transform: none; }
+}
+
 /* ---------- Eingabe-Pille (Port von ai-chat-input) ---------- */
 .chat-bar {
   display: flex;

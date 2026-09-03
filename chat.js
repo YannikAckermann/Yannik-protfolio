@@ -96,6 +96,130 @@
   var lastFocus = null;
   var robotLoaded = false;
 
+  /* ---------- Handlungen ----------
+     Das Modell darf keine URLs vorschlagen, sondern nur eine Kennung aus dieser
+     Liste nennen (siehe api/profile.js). Ziel und Beschriftung stehen hier in
+     der Seite — was nicht in der Liste steht, wird verworfen. Damit kann eine
+     manipulierte oder halluzinierte Antwort keinen fremden Link unterschieben. */
+  function jumpTo(selector) {
+    return function () {
+      var target = document.querySelector(selector);
+      close({ keepFocus: true });
+      if (!target) return;
+      // Erst nach dem Schliessen scrollen: Lenis ist vorher gestoppt.
+      setTimeout(function () {
+        if (window.__lenis) window.__lenis.scrollTo(target, { offset: 0 });
+        else target.scrollIntoView({ behavior: "smooth" });
+      }, 60);
+    };
+  }
+
+  function openShots(key) {
+    return function () {
+      var fig = document.querySelector('.panel-media-shot[data-key="' + key + '"]');
+      if (!fig) return;
+      close({ keepFocus: true });
+      // Der Klick geht an den Handler in script.js, der die Bildansicht oeffnet.
+      setTimeout(function () { fig.click(); }, 120);
+    };
+  }
+
+  function openLink(url) {
+    return function () { window.open(url, "_blank", "noopener"); };
+  }
+
+  var ACTIONS = {
+    mcp_live: {
+      de: "MCP Gateway öffnen",
+      en: "Open MCP Gateway",
+      note_de: "nur im Swisscom-Netz",
+      note_en: "Swisscom network only",
+      run: openLink("https://mcp-gateway-frontend.dev-scapp-corp.swisscom.com/de")
+    },
+    github_ml: {
+      de: "Repository ansehen",
+      en: "View repository",
+      run: openLink("https://github.com/YannikAckermann/Country-prediction")
+    },
+    github: {
+      de: "GitHub-Profil",
+      en: "GitHub profile",
+      run: openLink("https://github.com/YannikAckermann")
+    },
+    linkedin: {
+      de: "LinkedIn-Profil",
+      en: "LinkedIn profile",
+      run: openLink("https://www.linkedin.com/in/yannik-ackermann-5a3a10322/")
+    },
+    mail: {
+      de: "E-Mail schreiben",
+      en: "Write an email",
+      run: openLink(
+        "mailto:yannik.ackermann@swisscom.com?subject=" +
+          encodeURIComponent(isEN ? "Project enquiry" : "Projektanfrage")
+      )
+    },
+    shots_mcp: {
+      de: "Bilder vom MCP Gateway",
+      en: "MCP Gateway screenshots",
+      run: openShots("mcp")
+    },
+    shots_simultan: {
+      de: "Bilder der Simultanübersetzung",
+      en: "Live translation screenshots",
+      run: openShots("simultan")
+    },
+    goto_projects: { de: "Zu den Projekten", en: "Go to projects", run: jumpTo("#projekte") },
+    goto_exp: { de: "Zum Werdegang", en: "Go to career", run: jumpTo("#erfahrung") },
+    goto_about: { de: "Zu «Über mich»", en: "Go to «About»", run: jumpTo("#manifest") },
+    goto_contact: { de: "Zum Kontakt", en: "Go to contact", run: jumpTo("#kontakt") }
+  };
+
+  // Das Modell haengt am Ende eine Zeile "[[actions: id, id]]" an.
+  var ACTION_LINE = /\[\[\s*actions?\s*:([^\]]*)\]\]/i;
+  // Waehrend des Streamens taucht die Zeile zeichenweise auf — der angefangene
+  // Marker darf nicht kurz als Text aufblitzen.
+  var ACTION_PARTIAL = /\n*\[\[?[^\]]*$/;
+
+  function splitActions(text) {
+    var ids = [];
+    var body = String(text).replace(ACTION_LINE, function (_, list) {
+      list.split(",").forEach(function (raw) {
+        var id = raw.trim().toLowerCase();
+        if (ACTIONS[id] && ids.indexOf(id) === -1) ids.push(id);
+      });
+      return "";
+    });
+    return { text: body.trim(), ids: ids.slice(0, 3) };
+  }
+
+  function renderActions(container, ids) {
+    if (!ids.length) return;
+    var box = document.createElement("div");
+    box.className = "chat-actions";
+    ids.forEach(function (id) {
+      var a = ACTIONS[id];
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chat-action";
+      b.innerHTML =
+        '<span class="chat-action-label"></span>' +
+        '<svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" fill="none" ' +
+        'stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+      b.querySelector(".chat-action-label").textContent = isEN ? a.en : a.de;
+      var note = isEN ? a.note_en : a.note_de;
+      if (note) {
+        var s = document.createElement("small");
+        s.textContent = note;
+        b.querySelector(".chat-action-label").appendChild(s);
+      }
+      b.addEventListener("click", a.run);
+      box.appendChild(b);
+    });
+    container.appendChild(box);
+  }
+
   /* ---------- 3D-Roboter ----------
      Nur der Roboter (Spline-Szene) — kein Card/Spotlight-Rahmen. Der schwere
      Spline-Runtime wird erst beim ersten Oeffnen des Chats geladen, damit der
@@ -293,18 +417,21 @@
     setTimeout(function () { input.focus(); }, 420);
   }
 
-  function close() {
+  // opts.keepFocus: beim Sprung zu einem Abschnitt nicht zurueck auf den
+  // Auslöser fokussieren — das wuerde die Seite sofort wieder hochziehen.
+  function close(opts) {
     root.classList.remove("open");
     toggle.setAttribute("aria-expanded", "false");
     if (window.__lenis) window.__lenis.start();
     document.body.style.overflow = "";
     stopPlaceholders();
+    if (opts && opts.keepFocus) return;
     if (lastFocus && lastFocus.focus) lastFocus.focus();
     else toggle.focus();
   }
 
   toggle.addEventListener("click", open);
-  closeBtn.addEventListener("click", close);
+  closeBtn.addEventListener("click", function () { close(); });
 
   // Klick auf den unscharfen Hintergrund schliesst ebenfalls
   overlay.addEventListener("mousedown", function (e) {
@@ -375,16 +502,15 @@
         answer += piece;
         // Waehrend des Streamens Klartext — halbfertiges Markdown wuerde sonst
         // flackern (offene ** usw.). Formatiert wird am Ende einmal sauber.
-        placeholder.textContent = answer;
+        // Der Handlungs-Marker am Ende wird schon hier weggeschnitten, auch
+        // wenn erst ein Teil davon angekommen ist.
+        placeholder.textContent = splitActions(answer).text.replace(ACTION_PARTIAL, "");
         log.scrollTop = log.scrollHeight;
       }
 
-      if (answer.trim()) {
-        placeholder.innerHTML = renderMarkdown(answer);
-        log.scrollTop = log.scrollHeight;
-      }
+      var result = splitActions(answer);
 
-      if (!answer.trim()) {
+      if (!result.text) {
         placeholder.remove();
         addMessage(T.errEmpty, "error");
         setBusy(false);
@@ -392,8 +518,13 @@
         return;
       }
 
+      placeholder.innerHTML = renderMarkdown(result.text);
+      renderActions(placeholder, result.ids);
+      log.scrollTop = log.scrollHeight;
+
+      // Ohne Marker in den Verlauf — sonst ahmt das Modell die alte Auswahl nach.
       history.push({ role: "user", text: message });
-      history.push({ role: "model", text: answer });
+      history.push({ role: "model", text: result.text });
       if (history.length > 8) history = history.slice(-8);
     } catch (err) {
       placeholder.remove();
