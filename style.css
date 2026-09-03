@@ -497,26 +497,18 @@ em { font-style: italic; }
   flex-direction: row;
   align-items: center;
   gap: clamp(24px, 3vw, 48px);
-  width: min(92vw, 980px);
+  /* Die Intro-Tafel traegt nur noch Text. Frueher stand links ein Bild und
+     das Panel war 980px breit — ohne Bild klaffte rechts eine Luecke, bevor
+     das erste Projekt kam. Jetzt so breit wie der Text selbst. */
+  width: min(92vw, 520px);
 }
 
 .panel-intro::before { content: none; }
 .panel-intro:hover { transform: none; box-shadow: none; }
 
-
-.panel-intro-art { flex: 0 0 42%; }
-
 .panel-intro-copy {
   min-width: 0;
   max-width: 520px;
-}
-
-.panel-intro-art img {
-  width: 100%;
-  max-height: 56svh;
-  object-fit: cover;
-  filter: grayscale(1) contrast(1.06);
-  box-shadow: 14px 14px 0 var(--accent);
 }
 
 .panel-intro-title {
@@ -1286,7 +1278,6 @@ em { font-style: italic; }
   .panel { width: 86vw; padding: 24px 20px; grid-template-columns: 1fr; gap: 18px; }
   .panel-media { aspect-ratio: 16 / 10; max-height: none; }
   .panel-intro { flex-direction: column; align-items: flex-start; width: 86vw; gap: 20px; }
-  .panel-intro-art { flex: none; width: 60%; max-width: 280px; }
   .panel-num { font-size: 4rem; top: 10px; right: 16px; }
 
   .exp-item { grid-template-columns: 1fr; gap: 10px; }
