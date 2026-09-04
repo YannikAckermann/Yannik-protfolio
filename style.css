@@ -1982,3 +1982,53 @@ body.cursor-dark .cursor-ring { border-color: var(--paper); }
   .curtain, .curtain.up { transition: none; }
   .cursor-dot, .cursor-ring { display: none; }
 }
+
+/* ============================================
+   Editorial-Ausbau — Magnetik, Ziffern
+   ============================================ */
+
+/* ---------- Magnetische Elemente ----------
+   Der Zeiger zieht Schaltflaechen an, sobald er in ihre Naehe kommt — nicht
+   erst, wenn er darauf steht. JS setzt --mx/--my, hier fliessen sie in ein
+   transform, das Element skaliert zusaetzlich leicht mit. */
+[data-magnet] {
+  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(var(--ms, 1));
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Waehrend der Zeiger in Reichweite ist, soll das Element direkt folgen —
+   die traege Kurve gilt nur fuers Zurueckschnappen. */
+[data-magnet].pulling { transition: transform 0.18s cubic-bezier(0.33, 1, 0.68, 1); }
+
+/* ---------- Ziffern-Wasserzeichen ----------
+   Grosse angeschnittene Kapitelziffer am Rand. Liegt hinter dem Inhalt und
+   gibt jedem Abschnitt einen eigenen Massstab. */
+.watermark {
+  position: absolute;
+  right: -0.12em;
+  top: clamp(20px, 5vh, 70px);
+  z-index: 0;
+  font-family: var(--font-head);
+  font-size: clamp(9rem, 26vw, 26rem);
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line);
+  pointer-events: none;
+  user-select: none;
+}
+
+.exp .watermark { -webkit-text-stroke-color: rgba(243, 240, 234, 0.14); }
+
+.manifest, .exp, .contact { position: relative; overflow-x: clip; }
+
+/* Die Ziffer ausnehmen — sonst ueberschreibt diese Regel ihr
+   position: absolute (gleiche Spezifitaet, spaeter im Stylesheet) und sie
+   landet mitten im Textfluss statt am Rand. */
+.manifest > *:not(.watermark),
+.exp > *:not(.watermark),
+.contact > *:not(.watermark) { position: relative; z-index: 1; }
+
+@media (max-width: 900px) { .watermark { display: none; } }

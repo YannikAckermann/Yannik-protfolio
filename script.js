@@ -462,6 +462,58 @@
 
   window.addEventListener("load", function () { ScrollTrigger.refresh(); });
 
+
+  /* ---------- Magnetische Schaltflaechen ----------
+     Der Zeiger zieht das Element leicht an. Schreibt nur zwei CSS-Variablen,
+     die in ein transform fliessen — also reines Kompositionieren. */
+  if (!prefersReduced && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    var magnete = [].slice.call(document.querySelectorAll("[data-magnet]"));
+    if (magnete.length) {
+      var RADIUS = 140;          // ab hier beginnt die Anziehung
+      var STAERKE = 0.55;        // wie weit das Element mitgeht
+      var mausX = -9999, mausY = -9999, offen = false;
+
+      window.addEventListener("mousemove", function (e) {
+        mausX = e.clientX;
+        mausY = e.clientY;
+        if (!offen) { offen = true; requestAnimationFrame(rechne); }
+      }, { passive: true });
+
+      function rechne() {
+        offen = false;
+        magnete.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          if (!r.width) return;                      // ausgeblendet
+          var cx = r.left + r.width / 2;
+          var cy = r.top + r.height / 2;
+          var dx = mausX - cx;
+          var dy = mausY - cy;
+          // Reichweite waechst mit dem Element, damit grosse Flaechen nicht
+          // erst im letzten Moment reagieren.
+          var reichweite = RADIUS + Math.max(r.width, r.height) / 2;
+          var abstand = Math.sqrt(dx * dx + dy * dy);
+
+          if (abstand > reichweite) {
+            if (el.classList.contains("pulling")) {
+              el.classList.remove("pulling");
+              el.style.setProperty("--mx", "0px");
+              el.style.setProperty("--my", "0px");
+              el.style.setProperty("--ms", "1");
+            }
+            return;
+          }
+          // Je naeher, desto staerker — quadratisch, damit es sanft einsetzt
+          var naehe = 1 - abstand / reichweite;
+          var zug = STAERKE * naehe * naehe;
+          el.classList.add("pulling");
+          el.style.setProperty("--mx", (dx * zug).toFixed(1) + "px");
+          el.style.setProperty("--my", (dy * zug).toFixed(1) + "px");
+          el.style.setProperty("--ms", (1 + naehe * 0.12).toFixed(3));
+        });
+      }
+    }
+  }
+
   /* ---------- Eigener Cursor ----------
      Punkt folgt sofort, Ring zieht weich nach. Nur bei echter Maus, und
      nicht bei prefers-reduced-motion. Laeuft auf requestAnimationFrame und
