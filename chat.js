@@ -37,6 +37,8 @@
         errNotConfigured:
           "The chat isn't set up yet. You can reach Yannik directly at yannik.ackermann@swisscom.com.",
         errRate: "That was a lot of questions at once — please try again in a minute.",
+        errQuota:
+          "The assistant has used up its daily quota. It will work again tomorrow — or write to Yannik directly at yannik.ackermann@swisscom.com.",
         errBusy:
           "The AI service is briefly overloaded. Please try again in a moment — or email yannik.ackermann@swisscom.com.",
         errGeneric:
@@ -72,6 +74,8 @@
         errNotConfigured:
           "Der Chat ist noch nicht eingerichtet. Du erreichst Yannik direkt unter yannik.ackermann@swisscom.com.",
         errRate: "Das waren viele Fragen auf einmal — bitte in einer Minute nochmal versuchen.",
+        errQuota:
+          "Der Assistent hat sein Tageskontingent aufgebraucht. Morgen geht es wieder — oder schreib Yannik direkt: yannik.ackermann@swisscom.com.",
         errBusy:
           "Der AI-Dienst ist gerade kurz überlastet. Bitte gleich nochmal versuchen — oder eine Mail an yannik.ackermann@swisscom.com.",
         errGeneric:
@@ -553,9 +557,13 @@
       if (!res.ok) {
         var reason = T.errGeneric;
         var payload = await res.json().catch(function () { return {}; });
+        // Googles Status steckt in payload.status — die eigene API verpackt ihn
+        // in ein 502. Ohne diese Zeile sah ein erschoepftes Tageskontingent aus
+        // wie ein kaputter Bot ("Da ist etwas schiefgelaufen").
         if (res.status === 503 && payload.error === "not_configured") reason = T.errNotConfigured;
-        else if (res.status === 503) reason = T.errBusy;
-        else if (res.status === 429) reason = T.errRate;
+        else if (res.status === 429) reason = T.errRate;          // eigenes Limit
+        else if (payload.status === 429) reason = T.errQuota;     // Googles Kontingent
+        else if (res.status === 503 || payload.status === 503) reason = T.errBusy;
         placeholder.remove();
         addMessage(reason, "error");
         setBusy(false);

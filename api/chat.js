@@ -5,8 +5,26 @@ export const config = { runtime: "edge" };
 // Modelle per Env überschreibbar — welche der Key kann, zeigt api/list-models.mjs.
 // Gemini liefert bei Lastspitzen 503; dann wird der Reihe nach das nächste
 // Modell probiert, statt dem Besucher einen Fehler zu zeigen.
+//
+// Wichtig fürs Kontingent: das Gratis-Limit ist
+//   GenerateRequestsPerDayPerProjectPerModel-FreeTier = 20
+// also 20 Anfragen pro Tag *und Modell*. Mit zwei Modellen war die Seite nach
+// rund 40 Anfragen für den Rest des Tages tot. Jeder weitere Name in dieser
+// Liste bringt eigene 20 dazu — deshalb mehrere Generationen statt nur der
+// neuesten. Bewusst ausgeschrieben und ohne "-latest"-Aliasse: die zeigen auf
+// eines der Modelle unten und teilen sich dann dasselbe Kontingent.
+const FALLBACK_MODELS = [
+  "gemini-3.8-flash",
+  "gemini-3-flash-preview",
+  "gemini-3.7-flash",
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-3.1-flash-lite"
+];
+
 const MODELS = [
-  ...new Set([process.env.GEMINI_MODEL || "gemini-3-flash-preview", "gemini-flash-latest"])
+  ...new Set([process.env.GEMINI_MODEL, ...FALLBACK_MODELS].filter(Boolean))
 ];
 
 // Ein überlastetes/hängendes Modell soll nicht die ganze Anfrage blockieren:
@@ -16,8 +34,12 @@ const MODEL_TIMEOUT_MS = Number(process.env.CHAT_MODEL_TIMEOUT_MS || 6000);
 const endpointFor = (model) =>
   `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
 
-// Status, bei denen sich ein weiterer Versuch lohnt (Überlastung, Rate-Limit, Serverfehler)
-const RETRYABLE = new Set([429, 500, 502, 503, 504]);
+// Status, bei denen sich ein weiterer Versuch lohnt (Überlastung, Rate-Limit, Serverfehler).
+// 400 gehoert dazu, obwohl es sonst ein dauerhafter Fehler waere: die Generationen
+// unterstuetzen unterschiedliche Felder im Request (gemini-3.6-flash lehnt z. B.
+// thinkingConfig mit "invalid argument" ab). Ohne diese Ausnahme legt ein einziges
+// inkompatibles Modell die ganze Fallback-Kette lahm.
+const RETRYABLE = new Set([400, 429, 500, 502, 503, 504]);
 
 const MAX_MESSAGE_LEN = 500;
 const MAX_HISTORY = 8;          // letzte N Nachrichten, hält den Prompt klein
@@ -153,62 +175,91 @@ export default async function handler(req) {
 
   contents.push({ role: "user", parts: [{ text: message }] });
 
-  const body = JSON.stringify({
+  const basis = {
     contents,
     systemInstruction: { parts: [{ text: lang === "en" ? SYSTEM_EN : SYSTEM_DE }] },
-    // thinkingBudget 0: neuere Flash-Modelle verbrauchen sonst einen Teil des
-    // Token-Budgets fürs interne Denken und die Antwort bricht mittendrin ab.
-    generationConfig: {
-      maxOutputTokens: 600,
-      temperature: 0.6,
-      thinkingConfig: { thinkingBudget: 0 }
-    },
+    generationConfig: { maxOutputTokens: 600, temperature: 0.6 },
     safetySettings: []
+  };
+
+  // thinkingBudget 0: neuere Flash-Modelle verbrauchen sonst einen Teil des
+  // Token-Budgets fürs interne Denken und die Antwort bricht mittendrin ab.
+  const body = JSON.stringify({
+    ...basis,
+    generationConfig: { ...basis.generationConfig, thinkingConfig: { thinkingBudget: 0 } }
   });
+
+  // Nicht jede Generation kennt thinkingConfig — gemini-3.6-flash lehnt den
+  // Request damit mit 400 ab. Fuer diesen Fall dieselbe Anfrage ohne das Feld.
+  const bodyOhneThinking = JSON.stringify(basis);
 
   let upstream = null;
   let lastStatus = 0;
   let lastDetail = "";
   let usedModel = MODELS[0];
 
-  for (const model of MODELS) {
-    let res;
-    // Bricht den Versuch ab, wenn bis zum Timeout kein Antwort-Header (also kein
-    // Stream-Start) kommt — dann fällt die Schleife auf das nächste Modell zurück.
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), MODEL_TIMEOUT_MS);
-    try {
-      res = await fetch(endpointFor(model), {
-        method: "POST",
-        headers: { "content-type": "application/json", "x-goog-api-key": key },
-        body,
-        signal: controller.signal
-      });
-    } catch (err) {
-      lastStatus = 0;
-      lastDetail = controller.signal.aborted ? `timeout nach ${MODEL_TIMEOUT_MS}ms` : String(err?.message || err);
-      continue;
-    } finally {
-      clearTimeout(timer);
-    }
+  // Gesamtbudget: bei sieben Modellen koennte die Schleife sonst im
+  // schlimmsten Fall 7 x Timeout dauern und der Besucher wartet ewig.
+  // Ausgeschoepfte Modelle antworten mit 429 in Sekundenbruchteilen, teuer
+  // sind nur haengende — die deckelt dieses Budget.
+  const budgetEnde = Date.now() + MODEL_TIMEOUT_MS * 3;
 
-    if (res.ok && res.body) {
-      upstream = res;
-      usedModel = model;
+  for (const model of MODELS) {
+    if (upstream === null && Date.now() > budgetEnde) {
+      lastDetail = lastDetail || "Zeitbudget fuer Modellwechsel aufgebraucht";
       break;
     }
+    // Erst mit thinkingConfig; lehnt das Modell den Request mit 400 ab,
+    // dasselbe Modell noch einmal ohne dieses Feld probieren.
+    for (const versuchsBody of [body, bodyOhneThinking]) {
+      let res;
+      // Bricht den Versuch ab, wenn bis zum Timeout kein Antwort-Header (also kein
+      // Stream-Start) kommt — dann fällt die Schleife auf das nächste Modell zurück.
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), MODEL_TIMEOUT_MS);
+      try {
+        res = await fetch(endpointFor(model), {
+          method: "POST",
+          headers: { "content-type": "application/json", "x-goog-api-key": key },
+          body: versuchsBody,
+          signal: controller.signal
+        });
+      } catch (err) {
+        lastStatus = 0;
+        lastDetail = controller.signal.aborted ? `timeout nach ${MODEL_TIMEOUT_MS}ms` : String(err?.message || err);
+        // Timeouts blieben bisher stumm — im Log war dann nicht zu sehen, welches
+        // Modell haengt und wie viel Zeit dabei verloren geht.
+        console.error(`Gemini-Abbruch (Modell: ${model}): ${lastDetail}`);
+        break;
+      } finally {
+        clearTimeout(timer);
+      }
 
-    lastStatus = res.status;
-    try {
-      lastDetail = (await res.text()).slice(0, 300);
-    } catch {
-      lastDetail = "";
+      if (res.ok && res.body) {
+        upstream = res;
+        usedModel = model;
+        break;
+      }
+
+      lastStatus = res.status;
+      try {
+        // 300 Zeichen schnitten die Meldung genau vor der Angabe ab, *welches*
+        // Kontingent erschoepft ist — damit war ein 429 nicht zu deuten.
+        lastDetail = (await res.text()).slice(0, 900);
+      } catch {
+        lastDetail = "";
+      }
+      console.error(`Gemini-Fehler ${res.status} (Modell: ${model}): ${lastDetail}`);
+
+      // Nur ein 400 rechtfertigt den zweiten Anlauf ohne thinkingConfig.
+      if (res.status !== 400 || versuchsBody === bodyOhneThinking) break;
     }
-    console.error(`Gemini-Fehler ${res.status} (Modell: ${model}): ${lastDetail}`);
+
+    if (upstream) break;
 
     // Bei dauerhaften Fehlern (z. B. 403 ungültiger Key) bringt ein anderes
     // Modell nichts — dann sofort abbrechen.
-    if (!RETRYABLE.has(res.status) && res.status !== 404) break;
+    if (lastStatus && !RETRYABLE.has(lastStatus) && lastStatus !== 404) break;
   }
 
   if (!upstream) {
