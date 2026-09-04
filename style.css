@@ -2046,12 +2046,14 @@ body.cursor-dark .cursor-ring { border-color: var(--paper); }
   z-index: 0;
   margin: 0;
   font-family: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
-  /* Am Zeichenraster ausgerichtet: die Breite ergibt sich aus 86 Zeichen. */
-  font-size: clamp(4px, 0.52vw, 8px);
-  line-height: 1.06;
-  letter-spacing: 0.02em;
+  /* Die Breite ergibt sich aus 64 Zeichen. Bei 4px pro Zeichen war nur ein
+     Fleck zu sehen — ASCII muss so gross sein, dass man die einzelnen
+     Zeichen erkennt, sonst ist es kein Bild mehr. */
+  font-size: clamp(9px, 0.8vw, 15px);
+  line-height: 1.05;
+  letter-spacing: 0;
   white-space: pre;
-  color: rgba(243, 240, 234, 0.3);
+  color: rgba(243, 240, 234, 0.5);
   pointer-events: none;
   user-select: none;
 }

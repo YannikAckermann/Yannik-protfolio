@@ -57,7 +57,7 @@ def main() -> None:
     # weisse Hintergrund der Bezugspunkt und die Figur wird zu flau.
     bild = ImageOps.autocontrast(bild.convert("L"), cutoff=2)
 
-    for breite, name in ((86, "ascii-portrait.txt"),):
+    for breite, name in ((64, "ascii-portrait.txt"),):
         text = zu_ascii(bild, breite)
         ziel = ASSETS / name
         ziel.write_text(text + "\n", encoding="utf-8")
