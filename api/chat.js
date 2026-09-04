@@ -27,6 +27,28 @@ const MODELS = [
   ...new Set([process.env.GEMINI_MODEL, ...FALLBACK_MODELS].filter(Boolean))
 ];
 
+/* ---------- Kurzzeit-Sperre fuer lahme Modelle ----------
+   Ein haengendes Modell kostet pro Anfrage den vollen Timeout. Ohne Gedaechtnis
+   zahlt das jeder Besucher erneut — gemessen 14-16s, weil gleich zwei Modelle
+   nacheinander ins Leere liefen. Wer erschoepft (429) oder haengt, wird deshalb
+   kurz uebersprungen. Bewusst nur im Arbeitsspeicher der Edge-Instanz: das
+   reicht, weil eine Instanz mehrere Anfragen hintereinander bedient, und es
+   kostet keinen KV-Aufruf. Die Sperre ist kurz, damit ein erholtes Modell
+   schnell wieder drankommt. */
+const SPERRE_MS = Number(process.env.CHAT_MODEL_COOLDOWN_MS || 90_000);
+const gesperrt = new Map();
+
+const istGesperrt = (model) => (gesperrt.get(model) || 0) > Date.now();
+const sperren = (model) => gesperrt.set(model, Date.now() + SPERRE_MS);
+
+// Reihenfolge fuer diesen Aufruf: erst die freien Modelle, gesperrte hinten
+// dran — nie ganz weglassen, sonst steht die Seite, wenn alle gesperrt sind.
+function modellReihenfolge() {
+  const frei = MODELS.filter((m) => !istGesperrt(m));
+  const rest = MODELS.filter((m) => istGesperrt(m));
+  return [...frei, ...rest];
+}
+
 // Ein überlastetes/hängendes Modell soll nicht die ganze Anfrage blockieren:
 // nach diesem Timeout wird der Versuch abgebrochen und das nächste Modell probiert.
 const MODEL_TIMEOUT_MS = Number(process.env.CHAT_MODEL_TIMEOUT_MS || 6000);
@@ -204,7 +226,7 @@ export default async function handler(req) {
   // sind nur haengende — die deckelt dieses Budget.
   const budgetEnde = Date.now() + MODEL_TIMEOUT_MS * 3;
 
-  for (const model of MODELS) {
+  for (const model of modellReihenfolge()) {
     if (upstream === null && Date.now() > budgetEnde) {
       lastDetail = lastDetail || "Zeitbudget fuer Modellwechsel aufgebraucht";
       break;
@@ -230,6 +252,7 @@ export default async function handler(req) {
         // Timeouts blieben bisher stumm — im Log war dann nicht zu sehen, welches
         // Modell haengt und wie viel Zeit dabei verloren geht.
         console.error(`Gemini-Abbruch (Modell: ${model}): ${lastDetail}`);
+        sperren(model);
         break;
       } finally {
         clearTimeout(timer);
@@ -250,6 +273,10 @@ export default async function handler(req) {
         lastDetail = "";
       }
       console.error(`Gemini-Fehler ${res.status} (Modell: ${model}): ${lastDetail}`);
+
+      // Erschoepft (429), ueberlastet (503) oder ganz weg (404): fuer die
+      // naechsten Anfragen hinten anstellen, statt jedes Mal neu anzuklopfen.
+      if (res.status === 429 || res.status === 503 || res.status === 404) sperren(model);
 
       // Nur ein 400 rechtfertigt den zweiten Anlauf ohne thinkingConfig.
       if (res.status !== 400 || versuchsBody === bodyOhneThinking) break;

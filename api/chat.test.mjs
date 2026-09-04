@@ -140,6 +140,26 @@ res = await handler(makeReq({ message: "Test" }));
 text = await readAll(res);
 check("503 faellt auf zweites Modell zurueck", text === "fallback" && seen.length === 2, seen.join(" -> "));
 
+// 8d. Das mit 503 abgestrafte Modell wird bei der naechsten Anfrage hinten
+// angestellt. Ohne diese Sperre zahlt jeder Besucher denselben Fehlversuch
+// erneut — gemessen kostete ein haengendes Modell 6s pro Anfrage.
+const abgestraft = seen[0];
+seen = [];
+globalThis.fetch = async (url) => {
+  seen.push(url.match(/models\/([^:]+):/)[1]);
+  return {
+    ok: true, status: 200,
+    body: new ReadableStream({ start(c) { c.enqueue(encoder.encode('data: {"candidates":[{"content":{"parts":[{"text":"ok"}]}}]}\n\n')); c.close(); } })
+  };
+};
+res = await handler(makeReq({ message: "Test" }));
+await readAll(res);
+check(
+  "Gesperrtes Modell kommt nicht mehr zuerst dran",
+  seen.length === 1 && seen[0] !== abgestraft,
+  `${abgestraft} abgestraft, jetzt zuerst: ${seen[0]}`
+);
+
 // 9. Herkunftspruefung
 res = await handler(makeReq({ message: "Hallo" }, { origin: null }));
 check("Ohne Origin -> 403", res.status === 403);
