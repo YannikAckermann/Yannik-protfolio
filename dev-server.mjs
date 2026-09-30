@@ -39,7 +39,12 @@ const TYPES = {
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
-  ".pdf": "application/pdf"
+  ".pdf": "application/pdf",
+  // Ohne diese Zeile geht das Demo-Video als application/octet-stream raus —
+  // Vercel setzt den Typ selbst richtig, lokal sah es nach einem Download aus.
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
+  ".woff2": "font/woff2"
 };
 
 /* ---------- Node-Request in Web-Request übersetzen ---------- */

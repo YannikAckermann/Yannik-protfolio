@@ -90,13 +90,32 @@ die er gerne macht.
    sowohl im Frontend als auch im Backend gearbeitet, das Design gemäss Figma-Vorlage
    umgesetzt und die Anwendung deployed.
    Nicht von ihm stammt die Authentifizierung über Mobile ID.
-2. **AI-Chatbot Todo-App** (AI, Full-Stack)
+2. **swissscam** (Hackathon, AI & Security, Python)
+   Erkennt Betrugsanrufe, während sie laufen. Whisper transkribiert das Gespräch
+   lokal, ein feinjustiertes MiniLM-Modell bewertet den bisher gesagten Text und
+   warnt ab einem Risikowert von 95/100 — bevor die eigentliche Forderung kommt.
+   Audio, Transkript und Auswertung bleiben vollständig auf dem Gerät, es geht
+   nichts an einen Server.
+   Entstanden am Hackathon der swiss{si}weeks in Zürich, 24.–25.09.2026, auf die
+   Identity-Fraud-Challenge von Swisscom. Team aus drei Lernenden.
+   **Yanniks Anteil:** das Machine Learning und das Frontend-Design. Ausserdem
+   hat er das Demo-Video gemacht.
+   Gepitcht wurde auf Englisch: 1 Minute Pitch, 3 Minuten Fragen. Von rund
+   40 Teams kamen 9 in die zweite Runde, swissscam war nicht dabei — keine
+   Platzierung. Geplant ist, das Projekt Swisscom-intern nochmals vorzustellen.
+   Technologien: Python 3.13, FastAPI, Whisper (faster-whisper/whisperx),
+   PyTorch, transformers, MiniLM, React 19, Vite.
+   Repo: https://github.com/ZellerhoffBen/swissscam
+   Ehrlich zu den Grenzen: das Modell wurde auf synthetischen Daten trainiert
+   und erzeugt noch Fehlalarme (4 von 20 legitimen Anrufen wurden markiert).
+   Es ist ein Hackathon-Prototyp, keine fertige Lösung.
+3. **AI-Chatbot Todo-App** (AI, Full-Stack)
    Todo-App, die sich vollständig per Chat steuern lässt — natürliche Sprache statt Klicks.
    React-Frontend, Spring-Boot-Backend, deployed auf AWS.
-3. **Fussball-Prognosen** (Machine Learning)
+4. **Fussball-Prognosen** (Machine Learning)
    ML-Modell zur Vorhersage von Spielresultaten, von der Datenaufbereitung bis zum
    trainierten Modell. Python. Repo: https://github.com/YannikAckermann/Country-prediction
-4. **Power Apps Suite** (Low-Code)
+5. **Power Apps Suite** (Low-Code)
    Super League App und Zertifikatsverwaltung für das Swisscom-CLA-Team,
    inklusive automatisierter Workflows mit Power Automate.
 
@@ -152,6 +171,7 @@ zur Frage passt, hänge als allerletzte Zeile an — sonst lass die Zeile ganz w
   shots_mcp       — Screenshots des MCP Gateway anzeigen
   shots_simultan  — Screenshots der Simultanübersetzung anzeigen
   github_ml       — Repository des Fussball-Prognose-Modells
+  github_swissscam — Repository von swissscam (Hackathon-Projekt)
   github          — Yanniks GitHub-Profil (private Projekte)
   gitlab_swisscom — Yanniks GitLab-Profil bei Swisscom (seine Arbeitsprojekte)
   linkedin        — Yanniks LinkedIn-Profil
@@ -198,6 +218,7 @@ the question, append it as the very last line — otherwise omit the line entire
   shots_mcp       — show screenshots of the MCP Gateway
   shots_simultan  — show screenshots of the live translation project
   github_ml       — repository of the football prediction model
+  github_swissscam — swissscam repository (hackathon project)
   github          — Yannik's GitHub profile (personal projects)
   gitlab_swisscom — Yannik's GitLab profile at Swisscom (his work projects)
   linkedin        — Yannik's LinkedIn profile

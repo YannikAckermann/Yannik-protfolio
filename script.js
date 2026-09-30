@@ -463,6 +463,60 @@
   window.addEventListener("load", function () { ScrollTrigger.refresh(); });
 
 
+  /* ---------- Video im Projektpanel ----------
+     Laeuft nur, solange der Projektbereich zu sehen ist. Ohne das wuerde das
+     Video ausserhalb des Bildausschnitts weiterdekodieren — dieselbe Falle wie
+     beim Roboter im Chat, der nach dem Schliessen weiterrenderte.
+
+     Bewusst ueber ScrollTrigger und nicht ueber IntersectionObserver: die Seite
+     steuert alles andere auch darueber, und der Beobachter laesst sich im
+     Testbrowser nicht pruefen (er liefert dort ueberhaupt keine Rueckmeldungen,
+     weil die Render-Pipeline steht). Der Bereich ist ohnehin gepinnt — solange
+     er sichtbar ist, ist auch das Panel erreichbar.
+
+     preload="none" im Markup: die halbe Megabyte wird erst geholt, wenn jemand
+     wirklich so weit scrollt. */
+  (function () {
+    var videos = [].slice.call(document.querySelectorAll(".panel-video"));
+    var bereich = document.querySelector(".projects");
+    if (!videos.length || !bereich) return;
+
+    if (prefersReduced) {
+      // Kein automatisches Abspielen — dann wenigstens die Bedienelemente.
+      videos.forEach(function (v) { v.setAttribute("controls", ""); });
+      return;
+    }
+
+    function starte() {
+      videos.forEach(function (v) {
+        // Kein load() hier: das setzt die Quelle zurueck und bricht ein direkt
+        // danach aufgerufenes play() ab ("interrupted by a new load request").
+        // play() holt die Datei ohnehin selbst.
+        v.preload = "auto";
+        var p = v.play();
+        if (p && p.catch) {
+          p.catch(function () {
+            // Browser verweigert das automatische Abspielen. Dann wenigstens
+            // die Bedienelemente einblenden, sonst bleibt nur ein Standbild
+            // ohne jede Moeglichkeit, es selbst zu starten.
+            v.setAttribute("controls", "");
+          });
+        }
+      });
+    }
+
+    function halte() {
+      videos.forEach(function (v) { if (!v.paused) v.pause(); });
+    }
+
+    ScrollTrigger.create({
+      trigger: bereich,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: function (self) { if (self.isActive) starte(); else halte(); }
+    });
+  })();
+
   /* ---------- Magnetische Schaltflaechen ----------
      Der Zeiger zieht das Element leicht an. Schreibt nur zwei CSS-Variablen,
      die in ein transform fliessen — also reines Kompositionieren. */

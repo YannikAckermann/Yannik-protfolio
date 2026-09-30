@@ -2032,3 +2032,19 @@ body.cursor-dark .cursor-ring { border-color: var(--paper); }
 .contact > *:not(.watermark) { position: relative; z-index: 1; }
 
 @media (max-width: 900px) { .watermark { display: none; } }
+
+/* ---------- Projektpanel mit Video ----------
+   Stumme Schleife statt Screenshots. Das Video wird erst geladen, wenn das
+   Panel in Sicht kommt (preload="none" plus IntersectionObserver in
+   script.js) — sonst zoege ein halbes Megabyte am Seitenaufbau mit, das
+   die meisten Besucher nie sehen. */
+.panel-media-video {
+  background: var(--ink);
+}
+
+.panel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

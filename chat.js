@@ -155,6 +155,11 @@
       en: "GitHub profile",
       run: openLink("https://github.com/YannikAckermann")
     },
+    github_swissscam: {
+      de: "swissscam auf GitHub",
+      en: "swissscam on GitHub",
+      run: openLink("https://github.com/ZellerhoffBen/swissscam")
+    },
     gitlab_swisscom: {
       de: "GitLab-Profil",
       en: "GitLab profile",
