@@ -335,12 +335,15 @@ em { font-style: italic; }
 /* ---------- Manifest ---------- */
 .manifest { padding: clamp(100px, 15vh, 190px) var(--pad); }
 
+/* Eine Spalte, seit das Bild rechts weggefallen ist. Begrenzt, weil der
+   grosse Schriftgrad ueber die vollen 1400px sonst zu breit liefe, um ihn
+   noch angenehm zu lesen. */
 .manifest-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  grid-template-columns: 1fr;
   gap: clamp(40px, 6vw, 100px);
   align-items: start;
-  max-width: 1400px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
@@ -384,22 +387,9 @@ em { font-style: italic; }
   line-height: 1.5;
 }
 
-/* ---------- Art figures ---------- */
-.manifest-art, .exp-art { position: relative; }
-
-.manifest-art img, .exp-art img {
-  width: 100%;
-  filter: grayscale(1) contrast(1.06);
-  box-shadow: 14px 14px 0 var(--accent);
-}
-
-.manifest-art figcaption, .exp-art figcaption {
-  margin-top: 26px;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+/* Die Regeln fuer .manifest-art und .exp-art sind weggefallen: im Abschnitt 01
+   stand bis zuletzt Cabanels "Der gefallene Engel", das Yannik nicht mehr
+   wollte, und .exp-art war schon vorher ohne Markup. */
 
 /* ---------- Projects (horizontal) ---------- */
 .projects { position: relative; }
@@ -1285,9 +1275,7 @@ em { font-style: italic; }
   .hero-footer { flex-direction: column; align-items: center; gap: 14px; margin-top: 40px; }
   .hero-location { text-align: center; }
 
-  .manifest-grid, .exp-grid { grid-template-columns: 1fr; }
-  .manifest-art { max-width: 480px; }
-  .exp-art { position: static; max-width: 480px; }
+  .exp-grid { grid-template-columns: 1fr; }
 
   .projects-head { padding-top: 28px; flex-wrap: wrap; gap: 10px; }
 
