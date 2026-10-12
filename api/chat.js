@@ -151,6 +151,18 @@ async function overLimit(ip) {
   return null;
 }
 
+/* Das Modell kennt das heutige Datum nicht — ohne diese Zeile kann es Yanniks
+   Alter nicht aus dem Geburtsdatum ausrechnen und wuerde raten. Wird bei jeder
+   Anfrage frisch gesetzt, damit die Antwort nicht mit der Zeit falsch wird.
+   Europe/Zurich, weil die Seite auf die Schweiz zielt und ein Datumswechsel um
+   Mitternacht UTC sonst einen Tag danebenliegen koennte. */
+function heuteZeile(lang) {
+  const heute = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Zurich" });
+  return lang === "en"
+    ? `\n\nTODAY: ${heute}. Use this date to work out Yannik's current age from his date of birth.`
+    : `\n\nHEUTE: ${heute}. Rechne Yanniks aktuelles Alter mit diesem Datum aus seinem Geburtsdatum aus.`;
+}
+
 function json(body, status, extraHeaders) {
   return new Response(JSON.stringify(body), {
     status,
@@ -199,7 +211,7 @@ export default async function handler(req) {
 
   const basis = {
     contents,
-    systemInstruction: { parts: [{ text: lang === "en" ? SYSTEM_EN : SYSTEM_DE }] },
+    systemInstruction: { parts: [{ text: (lang === "en" ? SYSTEM_EN : SYSTEM_DE) + heuteZeile(lang) }] },
     generationConfig: { maxOutputTokens: 600, temperature: 0.6 },
     safetySettings: []
   };

@@ -7,6 +7,8 @@ export const PROFILE = `
 # Yannik Ackermann — Profil
 
 ## Person
+- Geburtsdatum: 20.07.2008. Das Alter nicht aus dem Gedächtnis nennen, sondern
+  aus diesem Datum und dem heutigen Datum ausrechnen (siehe HEUTE oben).
 - Glücklich vergeben an Leandra Redjepi. (nicht single)
 - Lernender Informatiker EFZ, Fachrichtung Applikationsentwicklung, bei Swisscom (seit 2024)
 - Aktuell im 3. Lehrjahr
