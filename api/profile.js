@@ -12,7 +12,8 @@ export const PROFILE = `
 - Glücklich vergeben an Leandra Redjepi. (nicht single)
 - Lernender Informatiker EFZ, Fachrichtung Applikationsentwicklung, bei Swisscom (seit 2024)
 - Aktuell im 3. Lehrjahr
-- Standort: Zürich, Schweiz
+- Wohnort: Waltenschwil, Kanton Aargau. Arbeitet bei Swisscom in Zürich.
+- Zwei Schwestern, beide ebenfalls Informatikerinnen.
 - Verfügbar für einen neuen Projekteinsatz ab 01.02.2027
 - Kontakt: yannik.ackermann@swisscom.com, +41 79 569 42 76
 - LinkedIn: https://www.linkedin.com/in/yannik-ackermann-5a3a10322/
@@ -20,8 +21,25 @@ export const PROFILE = `
 - GitHub: https://github.com/YannikAckermann
 - Sprachen: Deutsch (Muttersprache), Englisch (gut — BMS-Englisch mit Vornote 5.5
   abgeschlossen; seine Lehrerin hat ihm empfohlen, ein Sprachzertifikat zu machen)
-- Freizeit: kein Torhüter mehr beim FC Sarmenstorf, weil Sehne in der Hand gerissen. Gamed gerne oder versucht eigene Projekte zu bauen Zuhause. Wie zbs. ein Discord Bot, der Musik abspielen kann. 
-- Gehosted wurde das auf einem Altem PC, der zu einem Server umegabut wurde und mit LXC Instance läuft. Er verbringt auch gerne Zeit, mit Kollegen oder seiner Freundin.
+
+## Privates und Freizeit
+Diese Angaben darf der Bot nennen, wenn jemand nach der Person hinter den
+Projekten fragt. Nicht ungefragt aufzählen — sie sind Beiwerk, nicht der Kern.
+
+- **Eigene Projekte zuhause:** Yannik baut privat weiter. Zum Beispiel einen
+  Discord-Bot, der Musik abspielt. Gehostet hat er ihn auf einem alten PC, den
+  er zu einem Server umgebaut hat und auf dem LXC-Container laufen.
+- **OpenClaw:** Mit einer seiner beiden Schwestern tüftelt er an einer Idee,
+  Agents für Firmen zu konfigurieren. Das ist ein privates Nebenprojekt im
+  frühen Stadium — nicht als gegründetes Unternehmen darstellen und nicht so
+  klingen lassen, als wolle er Swisscom verlassen. Es zeigt vor allem, dass ihn
+  Agents auch ausserhalb der Arbeit beschäftigen.
+- **Gaming:** spielt viel und gerne mit seinen zwei Kollegen, quer durch die
+  Genres — Counter-Strike, Valorant, Sons of the Forest.
+- **Sport:** geht nach der Arbeit ins Swisscom-Gym. Früher Torhüter beim
+  FC Sarmenstorf, das ist vorbei: eine Sehne in der Hand ist gerissen.
+- **Sonst:** wenn er nicht am Rechner sitzt, meistens draussen mit seinen
+  Kollegen oder seiner Freundin.
 
 ## Verfügbarkeit und Zeitplan
 - Lehrabschluss: 31.07.2028. Bis dahin steht er für Projekteinsätze zur Verfügung.
@@ -136,7 +154,7 @@ die er gerne macht.
 
 ## Referenzen
 - Nithursan Naguleswaran (Lehrbetreuer)
-- Sven Waser (Projektgeber/Host)
+- Michel Haueter (Projektgeber/Host)
 `;
 
 export const SYSTEM_DE = `Du bist der Portfolio-Assistent auf der Website von Yannik Ackermann.

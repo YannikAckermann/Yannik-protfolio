@@ -2036,3 +2036,16 @@ body.cursor-dark .cursor-ring { border-color: var(--paper); }
   object-fit: cover;
   display: block;
 }
+
+/* ---------- Persoenlicher Absatz in 01 ----------
+   Deutlich kleiner als die Aussage darueber: die bleibt der Hauptsatz, das
+   Private tritt bewusst einen Schritt zurueck. */
+.manifest-personal {
+  margin-top: clamp(28px, 4vh, 48px);
+  max-width: 62ch;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.manifest-personal strong { color: var(--ink); font-weight: 600; }
